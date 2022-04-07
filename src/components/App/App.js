@@ -4,7 +4,7 @@ import { Route, Routes, Link } from "react-router-dom";
 import About from "../About/About";
 import Home from "../Home/Home";
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       <>
@@ -23,15 +23,9 @@ function App() {
       <Routes>
         <Route exact path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
-        {/* <Route exact path="/">
-          <Home />
-        </Route> */}
-        {/* <Route path="/about">
-          <About />
-        </Route> */}
       </Routes>
     </div>
   );
-}
+};
 
 export default App;
