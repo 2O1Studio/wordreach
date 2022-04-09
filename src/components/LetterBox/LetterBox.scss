@@ -24,10 +24,10 @@ $width: calc(
   font-size: 20px;
   text-align: center;
   padding: calc(($width - 20px) / 2) 0 calc(($width - 20px) / 2) 0;
-  &:first-child {
+  &:nth-child(8n + 1) {
     margin-left: 0px;
   }
-  &:last-child {
+  &:nth-child(8n + 8) {
     margin-right: 0px;
   }
 }

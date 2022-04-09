@@ -15,6 +15,14 @@ const Home = () => {
         <LetterBox displayLetter="!" />
         <LetterBox displayLetter="!" />
         <LetterBox displayLetter="!" />
+        <LetterBox displayLetter="H" />
+        <LetterBox displayLetter="E" />
+        <LetterBox displayLetter="L" />
+        <LetterBox displayLetter="L" />
+        <LetterBox displayLetter="O" />
+        <LetterBox displayLetter="!" />
+        <LetterBox displayLetter="!" />
+        <LetterBox displayLetter="!" />
       </div>
     </>
   );
