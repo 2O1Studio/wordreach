@@ -1,0 +1,36 @@
+//   _      __            _____               __
+//  | | /| / /__  _______/ / _ \___ ___ _____/ /
+//  | |/ |/ / _ \/ __/ _  / , _/ -_) _ `/ __/ _ \
+//  |__/|__/\___/_/  \_,_/_/|_|\__/\_,_/\__/_//_/
+
+@import "../../device";
+
+$letterBoxBorder: 2px;
+$letterBoxMargin: 2px;
+$width: calc(
+  (
+      100vw - ($letterBoxBorder * 16) - ($letterBoxMargin * 14) -
+        (2 * $bodyMargin)
+    ) / 8
+);
+
+.letterBox {
+  width: $width;
+  border: $letterBoxBorder solid black;
+  border-radius: 5px;
+  display: inline-block;
+  position: relative;
+  margin: $letterBoxMargin;
+  font-size: 20px;
+  text-align: center;
+  padding: calc(($width - 20px) / 2) 0 calc(($width - 20px) / 2) 0;
+  &:first-child {
+    margin-left: 0px;
+  }
+  &:last-child {
+    margin-right: 0px;
+  }
+}
+
+@media (min-width: 600px) {
+}
