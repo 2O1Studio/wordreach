@@ -3,12 +3,19 @@
 //  | |/ |/ / _ \/ __/ _  / , _/ -_) _ `/ __/ _ \
 //  |__/|__/\___/_/  \_,_/_/|_|\__/\_,_/\__/_//_/
 
-.title {
-  display: block;
-  clear: both;
-  width: 100%;
-  position: relative;
+// .title {
+//   display: block;
+//   clear: both;
+//   width: 100%;
+//   position: relative;
+// }
+.letterSelection {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0 20px 0;
 }
+
 .letterGrid {
   display: block;
   width: 100%;

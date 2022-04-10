@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@1,700&display=swap");
+
+.header {
+  width: calc(100vw - 20px);
+  margin: -10px 0 30px -10px;
+  height: 30px;
+  padding: 10px;
+  border-bottom: 1px solid grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    text-decoration: none;
+  }
+}
+.wrLogo {
+  font-family: "Noto Serif", serif;
+  color: black;
+  font-size: 20px;
+}

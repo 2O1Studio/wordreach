@@ -2,6 +2,7 @@
 //  | | /| / /__  _______/ / _ \___ ___ _____/ /
 //  | |/ |/ / _ \/ __/ _  / , _/ -_) _ `/ __/ _ \
 //  |__/|__/\___/_/  \_,_/_/|_|\__/\_,_/\__/_//_/
+//                      A 201 Studio original ❤︎
 
 @import "../../device";
 
@@ -30,6 +31,10 @@ $width: calc(
   &:nth-child(8n + 8) {
     margin-right: 0px;
   }
+}
+
+.landColour {
+  background-color: green;
 }
 
 @media (min-width: 600px) {
