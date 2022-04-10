@@ -1,6 +1,7 @@
 import React from "react";
 import "./Home.scss";
 import LetterBox from "../LetterBox/LetterBox";
+import AvailableLetterBox from "../LetterBox/AvailableLetterBox";
 
 const Home = () => {
   return (
@@ -59,12 +60,12 @@ const Home = () => {
       </div>
 
       <div className="letterSelection">
-        <LetterBox displayLetter="E" />
-        <LetterBox displayLetter="L" />
-        <LetterBox displayLetter="L" />
-        <LetterBox displayLetter="O" />
-        <LetterBox displayLetter="!" />
-        <LetterBox displayLetter="!" />
+        <AvailableLetterBox displayLetter="E" />
+        <AvailableLetterBox displayLetter="L" />
+        <AvailableLetterBox displayLetter="L" />
+        <AvailableLetterBox displayLetter="O" />
+        <AvailableLetterBox displayLetter="!" />
+        <AvailableLetterBox displayLetter="4" />
       </div>
     </>
   );

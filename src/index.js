@@ -20,3 +20,6 @@ root.render(
 
 // During an update, there's no need to pass the container again.
 // root.render(<App tab="profile" />);
+
+// Useful codepen for dragging items
+// https://codesandbox.io/s/silent-brook-y6h5o5?file=/src/Dustbin.js:528-713
