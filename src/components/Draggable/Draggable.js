@@ -1,6 +1,7 @@
 import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
+import "./Draggable.scss";
 
 export function Draggable(props) {
   const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -12,7 +13,13 @@ export function Draggable(props) {
   };
 
   return (
-    <button ref={setNodeRef} style={style} {...listeners} {...attributes}>
+    <button
+      ref={setNodeRef}
+      className="draggable"
+      style={style}
+      {...listeners}
+      {...attributes}
+    >
       {props.children}
     </button>
   );

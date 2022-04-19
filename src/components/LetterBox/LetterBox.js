@@ -8,12 +8,9 @@ const LetterBox = ({ id, chosenLetter }) => {
   });
   const style = {
     background: isOver ? "green" : undefined,
-    height: 200,
-    border: "1px solid #000",
-    margin: 40,
   };
   return (
-    <div ref={setNodeRef} style={{ ...style }}>
+    <div ref={setNodeRef} className="letterBox" style={{ ...style }}>
       {chosenLetter}
     </div>
   );

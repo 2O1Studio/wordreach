@@ -2,24 +2,17 @@ import { React, useState, useEffect } from "react";
 import "./Home.scss";
 import LetterBox from "../LetterBox/LetterBox";
 import { DndContext } from "@dnd-kit/core";
-import { Droppable } from "./Droppable";
-import { Draggable } from "./Draggable";
+import { Draggable } from "../Draggable/Draggable";
 
 const Home = () => {
   const [letterRecord, setLetterRecord] = useState([
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
-    "",
+    ["", "", "", "", "", "", "", ""],
+    ["", "", "", "", "", "", "", ""],
   ]);
   const [availableLetter, setAvailableLetter] = useState(null);
   const [availableLetter2, setAvailableLetter2] = useState(null);
-  const draggableMarkup = <Draggable id="d1">Drag me</Draggable>;
-  const draggableMarkup2 = <Draggable id="d2">Drag me2</Draggable>;
+  const draggableMarkup = <Draggable id="d1">A</Draggable>;
+  const draggableMarkup2 = <Draggable id="d2">B</Draggable>;
 
   const handleDragStart = (event) => {
     console.log(event);
@@ -31,7 +24,7 @@ const Home = () => {
     if (event.over) {
       let row = extractRowColumn(event.over.id)[0] - 1;
       let column = extractRowColumn(event.over.id)[1] - 1;
-      oldRecord[column] = returnDraggableObj(event.active.id);
+      oldRecord[row][column] = returnDraggableObj(event.active.id);
     }
     setLetterRecord(oldRecord);
   };
@@ -58,20 +51,27 @@ const Home = () => {
 
   return (
     <>
-      {/* <div className="letterGrid">
-      </div> */}
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <div className="letterGrid">
+          <LetterBox id="r1c1" chosenLetter={letterRecord[0][0]} />
+          <LetterBox id="r1c2" chosenLetter={letterRecord[0][1]} />
+          <LetterBox id="r1c3" chosenLetter={letterRecord[0][2]} />
+          <LetterBox id="r1c4" chosenLetter={letterRecord[0][3]} />
+          <LetterBox id="r1c5" chosenLetter={letterRecord[0][4]} />
+          <LetterBox id="r1c6" chosenLetter={letterRecord[0][5]} />
+          <LetterBox id="r1c7" chosenLetter={letterRecord[0][6]} />
+          <LetterBox id="r1c8" chosenLetter={letterRecord[0][7]} />
+          <LetterBox id="r2c1" chosenLetter={letterRecord[1][0]} />
+          <LetterBox id="r2c2" chosenLetter={letterRecord[1][1]} />
+          <LetterBox id="r2c3" chosenLetter={letterRecord[1][2]} />
+          <LetterBox id="r2c4" chosenLetter={letterRecord[1][3]} />
+          <LetterBox id="r2c5" chosenLetter={letterRecord[1][4]} />
+          <LetterBox id="r2c6" chosenLetter={letterRecord[1][5]} />
+          <LetterBox id="r2c7" chosenLetter={letterRecord[1][6]} />
+          <LetterBox id="r2c8" chosenLetter={letterRecord[1][7]} />
+        </div>
         {availableLetter === null ? draggableMarkup : null}
         {availableLetter2 === null ? draggableMarkup2 : null}
-
-        <LetterBox id="r1c1" chosenLetter={letterRecord[0]} />
-        <LetterBox id="r1c2" chosenLetter={letterRecord[1]} />
-        <LetterBox id="r1c3" chosenLetter={letterRecord[2]} />
-        <LetterBox id="r1c4" chosenLetter={letterRecord[3]} />
-        <LetterBox id="r1c5" chosenLetter={letterRecord[4]} />
-        <LetterBox id="r1c6" chosenLetter={letterRecord[5]} />
-        <LetterBox id="r1c7" chosenLetter={letterRecord[6]} />
-        <LetterBox id="r1c8" chosenLetter={letterRecord[7]} />
       </DndContext>
     </>
   );

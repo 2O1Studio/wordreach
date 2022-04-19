@@ -15,6 +15,7 @@ const App = () => {
 
       <Routes>
         <Route exact path="/" element={<Home />} />
+        {/* <Route exact path="/" element={<MultipleDroppables />} /> */}
         <Route path="/about" element={<About />} />
       </Routes>
       <div className="footer">
