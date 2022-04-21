@@ -4,89 +4,140 @@ import LetterBox from "../LetterBox/LetterBox";
 import { DndContext } from "@dnd-kit/core";
 import { Draggable } from "../Draggable/Draggable";
 
+const initialPlayableLetters = [
+  { id: "1", letter: "a", played: false },
+  { id: "2", letter: "b", played: false },
+  { id: "3", letter: "c", played: false },
+  { id: "4", letter: "d", played: false },
+  { id: "5", letter: "e", played: false },
+  { id: "6", letter: "f", played: false },
+  { id: "7", letter: "g", played: false },
+  { id: "8", letter: "h", played: false },
+  { id: "9", letter: "i", played: false },
+  { id: "10", letter: "j", played: false },
+];
+const initialBoardState = [
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+  ["", "", "", "", "", "", "", ""],
+];
+
+const LetterTile = ({ id, letter }) => {
+  return <Draggable id={id}>{letter}</Draggable>;
+};
+
 const Home = () => {
-  const [letterRecord, setLetterRecord] = useState([
-    ["", "", "", "", "", "", "", ""],
-    ["", "", "", "", "", "", "", ""],
-  ]);
-  const [availableLetter, setAvailableLetter] = useState(null);
-  const [availableLetter2, setAvailableLetter2] = useState(null);
-  const draggableMarkup = <Draggable id="d1">A</Draggable>;
-  const draggableMarkup2 = <Draggable id="d2">B</Draggable>;
+  const [board, setBoard] = useState(initialBoardState);
+  const [playableLetters, setPlayableLetters] = useState(
+    initialPlayableLetters
+  );
 
   const handleDragStart = (event) => {
     console.log(event);
   };
 
   const handleDragEnd = (event) => {
-    console.log(event);
-    let oldRecord = [...letterRecord];
-    if (event.over) {
-      // // if the draggable JSX already exists in the array, remove it
-      for (let i = 0; i < oldRecord.length; i++) {
-        for (let j = 0; j < oldRecord[0].length; j++) {
-          if (oldRecord[i][j].props) {
-            if (oldRecord[i][j].props.id == event.active.id) {
-              oldRecord[i][j] = "";
-            }
+    setPlayableLetters((oldSet) => {
+      let pieceToUpdate;
+
+      const newSet = oldSet.map((item) => {
+        // Check if the item we're mapping over has the id of the item that has been dropped
+        if (item.id === event.active.id) {
+          // If the item is not dropped over a valid target then return the item to the playable list (not on the board)
+          if (!event.over) {
+            return { ...item, played: false };
           }
+          // This is destructuring, we're pulling row and column out of element.over.data.current into it's own variable
+          const { row, column } = event.over.data.current;
+
+          // if the board has a staticLetter, don't do anything (put it back where it was)
+          if (board[row][column] !== "") {
+            return item;
+          }
+
+          // Look through the list of playable letter to find a letter with a played row and column of the dropped box
+          const found = playableLetters.find(
+            (o) => o.played?.row === row && o.played?.column === column
+          );
+
+          if (found) {
+            // Set pieceToUpdate to the found playedLetter and update it's played position to the current item's played position
+            // (we don't return in this statement because we have no other things to check for and we just want to play the move)
+            pieceToUpdate = {
+              ...found,
+              played: item.played,
+            };
+          }
+          // play the move
+          return { ...item, played: { row, column } };
         }
+
+        return item;
+      });
+
+      if (pieceToUpdate) {
+        return newSet.map((i) => {
+          if (pieceToUpdate.id === i.id) {
+            return pieceToUpdate;
+          }
+          return i;
+        });
       }
 
-      // adding the draggable JSX to the array
-      let row = extractRowColumn(event.over.id)[0] - 1;
-      let column = extractRowColumn(event.over.id)[1] - 1;
-      oldRecord[row][column] = returnDraggableObj(event.active.id);
-    }
-    console.log(oldRecord);
-    setLetterRecord(oldRecord);
-  };
-
-  const extractRowColumn = (letterBoxId) => {
-    var regex = /[+-]?\d+(?:\.\d+)?/g;
-    var match;
-    let arr = [];
-    while ((match = regex.exec(letterBoxId))) {
-      arr.push(Number(match[0]));
-    }
-    return arr;
-  };
-
-  const returnDraggableObj = (draggableId) => {
-    if (draggableId == "d1") {
-      setAvailableLetter(true);
-      return draggableMarkup;
-    } else {
-      setAvailableLetter2(true);
-      return draggableMarkup2;
-    }
+      return newSet;
+    });
   };
 
   return (
-    <>
+    <div>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
         <div className="letterGrid">
-          <LetterBox id="r1c1" chosenLetter={letterRecord[0][0]} />
-          <LetterBox id="r1c2" chosenLetter={letterRecord[0][1]} />
-          <LetterBox id="r1c3" chosenLetter={letterRecord[0][2]} />
-          <LetterBox id="r1c4" chosenLetter={letterRecord[0][3]} />
-          <LetterBox id="r1c5" chosenLetter={letterRecord[0][4]} />
-          <LetterBox id="r1c6" chosenLetter={letterRecord[0][5]} />
-          <LetterBox id="r1c7" chosenLetter={letterRecord[0][6]} />
-          <LetterBox id="r1c8" chosenLetter={letterRecord[0][7]} />
-          <LetterBox id="r2c1" chosenLetter={letterRecord[1][0]} />
-          <LetterBox id="r2c2" chosenLetter={letterRecord[1][1]} />
-          <LetterBox id="r2c3" chosenLetter={letterRecord[1][2]} />
-          <LetterBox id="r2c4" chosenLetter={letterRecord[1][3]} />
-          <LetterBox id="r2c5" chosenLetter={letterRecord[1][4]} />
-          <LetterBox id="r2c6" chosenLetter={letterRecord[1][5]} />
-          <LetterBox id="r2c7" chosenLetter={letterRecord[1][6]} />
-          <LetterBox id="r2c8" chosenLetter={letterRecord[1][7]} />
+          {board.map((row, rowIndex) => {
+            return row.map((staticLetter, columnIndex) => {
+              const playedLetter = playableLetters.find(
+                (o) =>
+                  o.played?.row === rowIndex && o.played?.column === columnIndex
+              );
+              return (
+                <LetterBox
+                  row={rowIndex}
+                  column={columnIndex}
+                  id={`r${rowIndex}c${columnIndex}`}
+                  chosenLetter={
+                    playedLetter ? (
+                      <LetterTile
+                        id={playedLetter.id}
+                        letter={playedLetter.letter}
+                      />
+                    ) : (
+                      staticLetter
+                    )
+                  }
+                />
+              );
+            });
+          })}
         </div>
-        {availableLetter === null ? draggableMarkup : null}
-        {availableLetter2 === null ? draggableMarkup2 : null}
+        <div style={{ display: "flex", flexWrap: "wrap" }}>
+          {playableLetters
+            .filter((i) => i.played === false)
+            .map((letter) => {
+              return (
+                <LetterTile
+                  key={letter.id}
+                  letter={letter.letter}
+                  id={letter.id}
+                />
+              );
+            })}
+        </div>
       </DndContext>
-    </>
+    </div>
   );
 };
 

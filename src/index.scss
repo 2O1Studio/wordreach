@@ -2,4 +2,9 @@
 
 body {
   margin: $bodyMargin;
+  user-select: none;
+}
+
+* {
+  box-sizing: border-box;
 }

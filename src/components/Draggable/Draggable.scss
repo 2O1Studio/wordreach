@@ -1,7 +1,20 @@
 .draggable {
-  // float: left;
-  // position: absolute;
-  max-height: 20px;
-  font-size: 12px;
-  display: inherit;
+  background-color: #f5cf90;
+  position: relative;
+  box-shadow: 0 0.5625mm 0.375mm -0.25mm rgba(0, 0, 0, 0.4);
+  border-style: solid;
+  border-top-width: 0.375mm;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 0.5625mm;
+  border-top-color: rgba(255, 255, 255, 0.45);
+  border-left-color: rgba(255, 255, 255, 0.25);
+  border-right-color: rgba(0, 0, 0, 0.15);
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.375mm;
+  width: 42px;
+  height: 42px;
+  margin: 0 32px 32px 0;
+  flex-shrink: 0;
+  cursor: pointer;
 }

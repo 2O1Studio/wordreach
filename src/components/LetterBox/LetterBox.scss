@@ -10,7 +10,7 @@ $letterBoxBorder: 2px;
 $letterBoxMargin: 2px;
 $width: calc(
   (
-      100vw - ($letterBoxBorder * 16) - ($letterBoxMargin * 14) -
+      100% - ($letterBoxBorder * 16) - ($letterBoxMargin * 14) -
         (2 * $bodyMargin)
     ) / 8
 );
@@ -25,13 +25,23 @@ $width: calc(
   font-size: 20px;
   text-align: center;
   min-height: 20px;
-  padding: calc(($width - 20px) / 2) 0 calc(($width - 20px) / 2) 0;
-  float: left;
+  // padding: calc(($width - 20px) / 2) 0 calc(($width - 20px) / 2) 0;
+  aspect-ratio: 1/1;
   &:nth-child(8n + 1) {
     margin-left: 0px;
   }
   &:nth-child(8n + 8) {
     margin-right: 0px;
+  }
+  display: flex;
+  padding: 4px;
+  position: relative;
+  .draggable {
+    position: absolute;
+    top: 0; left:0; right: 0; bottom:0;
+    width: 80%;
+    height: 80%;
+    margin: auto;
   }
 }
 
