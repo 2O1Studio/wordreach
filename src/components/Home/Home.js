@@ -22,10 +22,23 @@ const Home = () => {
     console.log(event);
     let oldRecord = [...letterRecord];
     if (event.over) {
+      // // if the draggable JSX already exists in the array, remove it
+      for (let i = 0; i < oldRecord.length; i++) {
+        for (let j = 0; j < oldRecord[0].length; j++) {
+          if (oldRecord[i][j].props) {
+            if (oldRecord[i][j].props.id == event.active.id) {
+              oldRecord[i][j] = "";
+            }
+          }
+        }
+      }
+
+      // adding the draggable JSX to the array
       let row = extractRowColumn(event.over.id)[0] - 1;
       let column = extractRowColumn(event.over.id)[1] - 1;
       oldRecord[row][column] = returnDraggableObj(event.active.id);
     }
+    console.log(oldRecord);
     setLetterRecord(oldRecord);
   };
 
