@@ -330,7 +330,7 @@ const Home = () => {
             });
           })}
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap" }}>
+        <div className="playableLettersWrap" >
           {playableLetters.map((letter, index) => {
             if (index >= 6) {
               return null;
@@ -349,7 +349,7 @@ const Home = () => {
         </div>
       </DndContext>
 
-      <button onClick={confirmWord}>confirm word</button>
+      <button onClick={confirmWord}>PLAY MOVE</button>
     </div>
   );
 };

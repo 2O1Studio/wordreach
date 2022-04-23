@@ -11,7 +11,7 @@ const LetterBox = ({ row, column, id, chosenLetter }) => {
     },
   });
   const style = {
-    background: isOver ? "green" : undefined,
+    background: isOver ? "grey" : undefined,
   };
   return (
     <div ref={setNodeRef} className="letterBox" style={{ ...style }}>

@@ -5,19 +5,24 @@
 //                      A 201 Studio original ❤︎
 
 @import "../../device";
+@import "../../assets/colours";
 
 $letterBoxBorder: 2px;
 $letterBoxMargin: 2px;
 $width: calc(
-  (
-      100% - ($letterBoxBorder * 16) - ($letterBoxMargin * 14) -
-        (2 * $bodyMargin)
-    ) / 8
+  (100% - ($letterBoxMargin * 14)) / 8
 );
+// $width: calc(
+//   (
+//       100% - ($letterBoxBorder * 16) - ($letterBoxMargin * 14) -
+//         (2 * $bodyMargin)
+//     ) / 8
+// );
+
 
 .letterBox {
   width: $width;
-  border: $letterBoxBorder solid black;
+  border: $letterBoxBorder solid $letterBoxColour;
   border-radius: 5px;
   display: inline-block;
   position: relative;
@@ -29,9 +34,13 @@ $width: calc(
   aspect-ratio: 1/1;
   &:nth-child(8n + 1) {
     margin-left: 0px;
+    background-color: $landColour;
+    border-color:$landBorderColour;
   }
   &:nth-child(8n + 8) {
     margin-right: 0px;
+    background-color: $landColour;
+    border-color:$landBorderColour;
   }
   display: flex;
   padding: 4px;
