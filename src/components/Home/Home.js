@@ -179,7 +179,8 @@ const getWordAxis = (board, playedLetters) => {
   }
 
   // todo: If only 1 letter played, then use the board state to find axis
-  throw new Error("Something went wrong");
+  alert("You can't play a 1 letter word; that's a letter, not a word.");
+  return false;
 };
 
 const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
@@ -210,6 +211,8 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
   });
 
   const axis = getWordAxis(playedBoard, playedLetters);
+
+  if (!axis) return false;
 
   if (
     !playedLetters.every(
