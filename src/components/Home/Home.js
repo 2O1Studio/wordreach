@@ -322,7 +322,7 @@ const Home = () => {
                         letter={playedLetter.letter}
                       />
                     ) : (
-                      staticLetter
+                      staticLetter.toUpperCase()
                     )
                   }
                 />
@@ -330,7 +330,7 @@ const Home = () => {
             });
           })}
         </div>
-        <div className="playableLettersWrap" >
+        <div className="playableLettersWrap">
           {playableLetters.map((letter, index) => {
             if (index >= 6) {
               return null;
