@@ -105,11 +105,13 @@ const getFirstLetterOfWordOnBoard = (board, arbitraryLetter, axis) => {
     letter: firstFoundLetter.letter,
     [axis]: arbitraryLetter.played[axis],
     [oppositeAxis]: firstLetterPosition,
+    static: firstFoundLetter.static,
   };
 };
 
 const getWordFromBoard = (board, firstLetter, axis, oppositeAxis) => {
   let word = "";
+  let hasStaticLetter = false;
 
   const addLetterToWord = (board, word, currentLetter, axis, oppositeAxis) => {
     word = word + currentLetter.letter;
@@ -118,10 +120,18 @@ const getWordFromBoard = (board, firstLetter, axis, oppositeAxis) => {
         b[axis] === currentLetter[axis] &&
         b[oppositeAxis] === currentLetter[oppositeAxis] + 1
     );
+    if (currentLetter.static === true) {
+      hasStaticLetter = true;
+    }
     if (nextLetter && nextLetter.letter !== "") {
       return addLetterToWord(board, word, nextLetter, axis, oppositeAxis);
     }
-    return word;
+
+    if (firstLetter.column === 0 || hasStaticLetter) return word;
+    alert(
+      "Your word must start on the first column, or branch off another word"
+    );
+    return false;
   };
 
   return addLetterToWord(board, word, firstLetter, axis, oppositeAxis);
@@ -170,7 +180,7 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
 
       return {
         letter: foundLetter ? foundLetter.letter : letter,
-        static: !foundLetter,
+        static: foundLetter ? false : true,
         row: rowIndex,
         column: columnIndex,
       };
@@ -210,9 +220,14 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
     alert("You have a space in your word.");
     return false;
   }
-
-  const word = getWordFromBoard(playedBoard, firstLetter, axis, oppositeAxis);
-  return validateWord(word);
+  const wordOrError = getWordFromBoard(
+    playedBoard,
+    firstLetter,
+    axis,
+    oppositeAxis
+  );
+  if (!wordOrError) return false;
+  return validateWord(wordOrError);
 };
 
 const Home = () => {
