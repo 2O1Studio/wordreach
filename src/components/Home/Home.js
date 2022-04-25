@@ -388,7 +388,9 @@ const Home = () => {
           })}
         </div>
         {hasWon ? (
-          <div>you win!</div>
+          <div>
+            <div>you win!</div>
+          </div>
         ) : (
           <div className="playableLettersWrap">
             {playableLetters.map((letter, index) => {
@@ -409,7 +411,13 @@ const Home = () => {
           </div>
         )}
       </DndContext>
-      {hasWon ? null : <button onClick={confirmWord}>PLAY MOVE</button>}
+      {hasWon ? (
+        new Array(20)
+          .fill("")
+          .map((c, i) => <div key={i} className="confetti-piece" />)
+      ) : (
+        <button onClick={confirmWord}>PLAY MOVE</button>
+      )}
     </div>
   );
 };
