@@ -41,6 +41,7 @@ const initialPlayableLetters = [
   { id: "21", letter: "h", played: false },
   { id: "22", letter: "y", played: false },
 ];
+
 const initialBoardState = [
   ["", "", "", "", "", "", "", ""],
   ["", "", "", "", "", "", "", ""],
@@ -144,9 +145,41 @@ const getWordAxis = (board, playedLetters) => {
       : "column";
   }
 
+  //Check adjacent board pieces
+
+  const letter = playedLetters[0].played;
+  if (
+    board.find((b) => {
+      if (
+        b.letter !== "" &&
+        b.row === letter.row &&
+        (b.column === letter.column - 1 || b.column === letter.column + 1)
+      ) {
+        return true;
+      }
+      return false;
+    })
+  ) {
+    return "row";
+  }
+
+  if (
+    board.find((b) => {
+      if (
+        b.letter !== "" &&
+        b.column === letter.column &&
+        (b.row === letter.row - 1 || b.row === letter.row + 1)
+      ) {
+        return true;
+      }
+      return false;
+    })
+  ) {
+    return "column";
+  }
+
   // todo: If only 1 letter played, then use the board state to find axis
-  alert("You've only played 1 letter and we don't account for this yet");
-  return "test";
+  throw new Error("Something went wrong");
 };
 
 const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
@@ -160,17 +193,6 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
     alert("Please play at least 1 letter");
     return false;
   }
-
-  const axis = getWordAxis(board, playedLetters);
-  if (
-    !playedLetters.every(
-      (l) => l.played[axis] === playedLetters[0].played[axis]
-    )
-  ) {
-    alert("You can only play a word in one direction at a time");
-    return false;
-  }
-  const oppositeAxis = axis === "row" ? "column" : "row";
 
   const playedBoard = board.flatMap((row, rowIndex) => {
     return row.flatMap((letter, columnIndex) => {
@@ -186,6 +208,18 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
       };
     });
   });
+
+  const axis = getWordAxis(playedBoard, playedLetters);
+
+  if (
+    !playedLetters.every(
+      (l) => l.played[axis] === playedLetters[0].played[axis]
+    )
+  ) {
+    alert("You can only play a word in one direction at a time");
+    return false;
+  }
+  const oppositeAxis = axis === "row" ? "column" : "row";
 
   // This looks backwards to find the first letter
   const firstLetter = getFirstLetterOfWordOnBoard(
@@ -235,6 +269,7 @@ const Home = () => {
   const [playableLetters, setPlayableLetters] = useState(
     initialPlayableLetters
   );
+  const [hasWon, setHasWon] = useState(false);
 
   const confirmWord = async () => {
     const isValid = await checkPlayedWordIsValidOnBoard(board, playableLetters);
@@ -250,6 +285,10 @@ const Home = () => {
               o.played?.row === rowIndex && o.played?.column === columnIndex
           );
           if (playedLetter) {
+            if (playedLetter.played.column === 7) {
+              setHasWon(true);
+              // Maybe show a restart button?
+            }
             return playedLetter.letter;
           }
           return item;
@@ -345,26 +384,29 @@ const Home = () => {
             });
           })}
         </div>
-        <div className="playableLettersWrap">
-          {playableLetters.map((letter, index) => {
-            if (index >= 6) {
-              return null;
-            }
-            if (letter.played !== false) {
-              return null;
-            }
-            return (
-              <LetterTile
-                key={letter.id}
-                letter={letter.letter}
-                id={letter.id}
-              />
-            );
-          })}
-        </div>
+        {hasWon ? (
+          <div>you win!</div>
+        ) : (
+          <div className="playableLettersWrap">
+            {playableLetters.map((letter, index) => {
+              if (index >= 6) {
+                return null;
+              }
+              if (letter.played !== false) {
+                return null;
+              }
+              return (
+                <LetterTile
+                  key={letter.id}
+                  letter={letter.letter}
+                  id={letter.id}
+                />
+              );
+            })}
+          </div>
+        )}
       </DndContext>
-
-      <button onClick={confirmWord}>PLAY MOVE</button>
+      {hasWon ? null : <button onClick={confirmWord}>PLAY MOVE</button>}
     </div>
   );
 };
