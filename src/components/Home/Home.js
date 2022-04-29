@@ -96,7 +96,6 @@ const getFirstLetterOfWordOnBoard = (board, arbitraryLetter, axis) => {
     axis,
     arbitraryLetter.played[axis]
   );
-
   const firstFoundLetter = board.find(
     (b) =>
       b[axis] === arbitraryLetter.played[axis] &&
@@ -110,11 +109,64 @@ const getFirstLetterOfWordOnBoard = (board, arbitraryLetter, axis) => {
   };
 };
 
-const getWordFromBoard = (board, firstLetter, axis, oppositeAxis) => {
+const getWordFromBoard = async (
+  board,
+  firstLetter,
+  axis,
+  oppositeAxis,
+  shouldCheckOppositeAxis = true
+) => {
   let word = "";
   let hasStaticLetter = false;
+  let hasFoundBranchedWord = false;
 
-  const addLetterToWord = (board, word, currentLetter, axis, oppositeAxis) => {
+  const addLetterToWord = async (
+    board,
+    word,
+    currentLetter,
+    axis,
+    oppositeAxis
+  ) => {
+    // Check if current letter is part of another joined word in the opposite axis
+    if (
+      shouldCheckOppositeAxis &&
+      board.find(
+        (b) =>
+          b.letter !== "" &&
+          b[oppositeAxis] === currentLetter[oppositeAxis] &&
+          (b[axis] === currentLetter[axis] + 1 ||
+            b[axis] === currentLetter[axis] - 1)
+      )
+    ) {
+      const newFirstLetter = getFirstLetterOfWordOnBoard(
+        board,
+        {
+          currentLetter,
+          played: {
+            row: currentLetter.row,
+            column: currentLetter.column,
+          },
+        },
+        oppositeAxis
+      );
+      const newWord = await getWordFromBoard(
+        board,
+        newFirstLetter,
+        oppositeAxis,
+        axis,
+        false
+      );
+
+      const wordCheck = await validateWord(newWord);
+      if (wordCheck) {
+        hasFoundBranchedWord = true;
+      } else {
+        alert(`${newWord} is not a valid word`);
+        return false;
+      }
+    }
+
+    // Get next letter
     word = word + currentLetter.letter;
     const nextLetter = board.find(
       (b) =>
@@ -125,17 +177,25 @@ const getWordFromBoard = (board, firstLetter, axis, oppositeAxis) => {
       hasStaticLetter = true;
     }
     if (nextLetter && nextLetter.letter !== "") {
-      return addLetterToWord(board, word, nextLetter, axis, oppositeAxis);
+      return await addLetterToWord(board, word, nextLetter, axis, oppositeAxis);
     }
 
-    if (firstLetter.column === 0 || hasStaticLetter) return word;
+    if (
+      firstLetter.column === 0 ||
+      hasStaticLetter ||
+      (hasFoundBranchedWord === true && shouldCheckOppositeAxis === true) ||
+      shouldCheckOppositeAxis === false
+    ) {
+      return word;
+    }
+
     alert(
-      "Your word must start on the first column, or branch off another word"
+      `Your word (${word}) must start on the first column, or branch off another word`
     );
     return false;
   };
 
-  return addLetterToWord(board, word, firstLetter, axis, oppositeAxis);
+  return await addLetterToWord(board, word, firstLetter, axis, oppositeAxis);
 };
 
 const getWordAxis = (board, playedLetters) => {
@@ -183,7 +243,7 @@ const getWordAxis = (board, playedLetters) => {
   return false;
 };
 
-const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
+const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   const playedLetters = playableLetters.filter((l) => l.played !== false);
   if (playedLetters === 0) {
     return false;
@@ -212,7 +272,10 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
 
   const axis = getWordAxis(playedBoard, playedLetters);
 
-  if (!axis) return false;
+  if (!axis) {
+    alert("No axis found");
+    return false;
+  }
 
   if (
     !playedLetters.every(
@@ -245,7 +308,7 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
     if (spaceFoundInWord) {
       continue;
     }
-    if (blankSpaceFound && element.letter !== "") {
+    if (blankSpaceFound && element.letter !== "" && element.static === false) {
       spaceFoundInWord = true;
     }
     if (element.letter === "") {
@@ -257,14 +320,16 @@ const checkPlayedWordIsValidOnBoard = (board, playableLetters) => {
     alert("You have a space in your word.");
     return false;
   }
-  const wordOrError = getWordFromBoard(
+  const wordOrError = await getWordFromBoard(
     playedBoard,
     firstLetter,
     axis,
     oppositeAxis
   );
-  if (!wordOrError) return false;
-  return validateWord(wordOrError);
+  if (!wordOrError) {
+    return false;
+  }
+  return await validateWord(wordOrError);
 };
 
 const Home = () => {
