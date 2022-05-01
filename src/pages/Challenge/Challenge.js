@@ -440,7 +440,19 @@ const Challenge = () => {
         </div>
         {hasWon ? (
           <div>
-            <div>Well done, you've reached the other side!</div>
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: 10,
+                marginBottom: 20,
+                fontWeight: 600,
+              }}
+            >
+              Well done, you've reached the other side!
+            </p>
+            <Button center to="/">
+              Play again
+            </Button>
           </div>
         ) : (
           <div className={styles.playableLettersWrap}>
