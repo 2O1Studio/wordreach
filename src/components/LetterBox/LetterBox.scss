@@ -8,21 +8,16 @@
 @import "../../assets/colours";
 
 $letterBoxBorder: 2px;
-$letterBoxMargin: 2px;
+$letterBoxMargin: 1px;
 $width: calc(
   (100% - ($letterBoxMargin * 14)) / 8
 );
-// $width: calc(
-//   (
-//       100% - ($letterBoxBorder * 16) - ($letterBoxMargin * 14) -
-//         (2 * $bodyMargin)
-//     ) / 8
-// );
+$borderColor: rgba(0,0,0,0.2);
 
 
 .letterBox {
   width: $width;
-  border: $letterBoxBorder solid $letterBoxColour;
+  border: $letterBoxBorder solid $borderColor;
   border-radius: 5px;
   display: inline-block;
   position: relative;
@@ -35,29 +30,25 @@ $width: calc(
   align-items: center;
   &:nth-child(8n + 1) {
     margin-left: 0px;
-    background-color: $landColour;
-    border-color:$landBorderColour;
+    background-color: $blue200;
+    border-color: $borderColor;
   }
   &:nth-child(8n + 8) {
     margin-right: 0px;
-    background-color: $landColour;
-    border-color:$landBorderColour;
+    background-color: $green200;
+    border-color: $borderColor;
   }
   display: flex;
-  padding: 4px;
   position: relative;
   .draggable {
+    // This is horrible
     position: absolute;
-    top: 0; left:0; right: 0; bottom:0;
-    width: 80%;
-    height: 80%;
+    top: -2px; left: -2px;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
     margin: auto;
   }
-}
-
-.landColour {
-  background-color: green;
-}
-
-@media (min-width: 600px) {
+  .draggableIsDragging {
+    z-index: 100;
+  }
 }

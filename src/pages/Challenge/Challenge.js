@@ -1,8 +1,10 @@
 import { React, useState } from "react";
-import "./Home.scss";
-import LetterBox from "../LetterBox/LetterBox";
+import LetterBox from "../../components/LetterBox/LetterBox";
 import { DndContext } from "@dnd-kit/core";
-import { Draggable } from "../Draggable/Draggable";
+import { Draggable } from "../../components/Draggable/Draggable";
+import styles from "./Challenge.module.scss";
+import { Button } from "../../components/Button/Button";
+import { PlayedLetterTile } from "../../components/PlayedLetterTile/PlayedLetterTile";
 
 const validateWord = async (word) => {
   const res = await fetch(
@@ -332,7 +334,7 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   return await validateWord(wordOrError);
 };
 
-const Home = () => {
+const Challenge = () => {
   const [board, setBoard] = useState(initialBoardState);
   const [playableLetters, setPlayableLetters] = useState(
     initialPlayableLetters
@@ -423,9 +425,9 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className={styles.wrapper}>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className="letterGrid">
+        <div className={styles.letterGrid}>
           {board.map((row, rowIndex) => {
             return row.map((staticLetter, columnIndex) => {
               const playedLetter = playableLetters.find(
@@ -443,8 +445,12 @@ const Home = () => {
                         id={playedLetter.id}
                         letter={playedLetter.letter}
                       />
+                    ) : staticLetter === "" ? (
+                      ""
                     ) : (
-                      staticLetter.toUpperCase()
+                      <PlayedLetterTile>
+                        {staticLetter.toUpperCase()}
+                      </PlayedLetterTile>
                     )
                   }
                 />
@@ -457,7 +463,7 @@ const Home = () => {
             <div>you win!</div>
           </div>
         ) : (
-          <div className="playableLettersWrap">
+          <div className={styles.playableLettersWrap}>
             {playableLetters.map((letter, index) => {
               if (index >= 6) {
                 return null;
@@ -481,10 +487,12 @@ const Home = () => {
           .fill("")
           .map((c, i) => <div key={i} className="confetti-piece" />)
       ) : (
-        <button onClick={confirmWord}>PLAY MOVE</button>
+        <Button center onClick={confirmWord}>
+          PLAY MOVE
+        </Button>
       )}
     </div>
   );
 };
 
-export default Home;
+export default Challenge;

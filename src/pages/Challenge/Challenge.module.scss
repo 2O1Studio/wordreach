@@ -3,12 +3,10 @@
 //  | |/ |/ / _ \/ __/ _  / , _/ -_) _ `/ __/ _ \
 //  |__/|__/\___/_/  \_,_/_/|_|\__/\_,_/\__/_//_/
 
-// .title {
-//   display: block;
-//   clear: both;
-//   width: 100%;
-//   position: relative;
-// }
+.wrapper {
+  margin: 0 15px;
+}
+
 .letterSelection {
   display: flex;
   align-items: center;
@@ -20,7 +18,7 @@
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  max-width: 650px;
+  max-width: 400px;
   margin: 0 auto;
 }
 

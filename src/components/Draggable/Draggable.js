@@ -4,9 +4,12 @@ import { CSS } from "@dnd-kit/utilities";
 import "./Draggable.scss";
 
 export function Draggable(props) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: props.id,
-  });
+  console.log(props);
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: props.id,
+    });
+
   const style = {
     transform: CSS.Translate.toString(transform),
     touchAction: "none",
@@ -15,7 +18,7 @@ export function Draggable(props) {
   return (
     <button
       ref={setNodeRef}
-      className="draggable"
+      className={`draggable ${isDragging ? "draggableIsDragging" : ""}`}
       style={style}
       {...listeners}
       {...attributes}

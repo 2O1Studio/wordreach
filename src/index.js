@@ -1,7 +1,7 @@
 import React from "react";
 import * as ReactDOMClient from "react-dom/client";
 import "./index.scss";
-import App from "./components/App/App";
+import App from "./pages";
 import { HashRouter } from "react-router-dom";
 
 const container = document.getElementById("root");

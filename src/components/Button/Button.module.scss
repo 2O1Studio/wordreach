@@ -1,0 +1,41 @@
+@import '../../assets/colours.scss';
+
+.buttonReset {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  line-height: normal;
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-appearance: none;
+}
+
+
+.button {
+  composes: buttonReset;
+  border-radius: 100px;
+  display: flex;
+  max-width: max-content;
+  color: white;
+  background-color: $blue400;
+  text-decoration: none;
+  padding: .8em 1em;
+  min-width: 180px;
+  text-align: center;
+  justify-content: center;
+  cursor: pointer;
+  &:hover {
+    background-color: $green400;
+  }
+}
+
+
+.centeredButton {
+  margin-left: auto;
+  margin-right: auto;
+}
