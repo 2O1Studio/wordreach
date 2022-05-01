@@ -13,7 +13,6 @@ const validateWord = async (word) => {
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
   );
   const status = await res.status;
-  // const data = await res.json();
   if (status === 200) {
     return true;
   }
