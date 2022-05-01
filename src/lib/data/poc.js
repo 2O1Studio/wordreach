@@ -159,7 +159,7 @@ const letterSets = {
 
 export const getInitialLetters = (setNumber) => {
   return letterSets[setNumber].map((letter, index) => ({
-    id: index,
+    id: `${letter}-${index}`,
     letter: letter,
     played: false,
   }));
