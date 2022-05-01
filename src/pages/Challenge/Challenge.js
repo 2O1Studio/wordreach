@@ -5,6 +5,8 @@ import { Draggable } from "../../components/Draggable/Draggable";
 import styles from "./Challenge.module.scss";
 import { Button } from "../../components/Button/Button";
 import { PlayedLetterTile } from "../../components/PlayedLetterTile/PlayedLetterTile";
+import { useParams } from "react-router-dom";
+import { getInitialLetters } from "../../lib/data/poc";
 
 const validateWord = async (word) => {
   const res = await fetch(
@@ -17,32 +19,6 @@ const validateWord = async (word) => {
   }
   return false;
 };
-
-const initialPlayableLetters = [
-  { id: "1", letter: "n", played: false },
-  { id: "2", letter: "t", played: false },
-  { id: "3", letter: "l", played: false },
-  { id: "4", letter: "e", played: false },
-  { id: "5", letter: "m", played: false },
-  { id: "6", letter: "t", played: false },
-
-  { id: "7", letter: "a", played: false },
-  { id: "8", letter: "t", played: false },
-  { id: "9", letter: "i", played: false },
-  { id: "10", letter: "n", played: false },
-  { id: "11", letter: "n", played: false },
-  { id: "12", letter: "t", played: false },
-  { id: "13", letter: "a", played: false },
-  { id: "14", letter: "h", played: false },
-  { id: "15", letter: "a", played: false },
-  { id: "16", letter: "r", played: false },
-  { id: "17", letter: "h", played: false },
-  { id: "18", letter: "x", played: false },
-  { id: "19", letter: "n", played: false },
-  { id: "20", letter: "p", played: false },
-  { id: "21", letter: "h", played: false },
-  { id: "22", letter: "y", played: false },
-];
 
 const initialBoardState = [
   ["", "", "", "", "", "", "", ""],
@@ -335,9 +311,13 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
 };
 
 const Challenge = () => {
+  let { letterSet } = useParams();
+  if (!letterSet) {
+    letterSet = 1;
+  }
   const [board, setBoard] = useState(initialBoardState);
   const [playableLetters, setPlayableLetters] = useState(
-    initialPlayableLetters
+    getInitialLetters(letterSet)
   );
   const [hasWon, setHasWon] = useState(false);
 
@@ -439,6 +419,7 @@ const Challenge = () => {
                   row={rowIndex}
                   column={columnIndex}
                   id={`r${rowIndex}c${columnIndex}`}
+                  key={`r${rowIndex}c${columnIndex}`}
                   chosenLetter={
                     playedLetter ? (
                       <LetterTile
@@ -460,7 +441,7 @@ const Challenge = () => {
         </div>
         {hasWon ? (
           <div>
-            <div>you win!</div>
+            <div>Well done, you've reached the other side!</div>
           </div>
         ) : (
           <div className={styles.playableLettersWrap}>

@@ -4,7 +4,6 @@ import { CSS } from "@dnd-kit/utilities";
 import "./Draggable.scss";
 
 export function Draggable(props) {
-  console.log(props);
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: props.id,
