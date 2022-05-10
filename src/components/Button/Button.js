@@ -3,21 +3,24 @@ import styles from "./Button.module.scss";
 import clsx from "clsx";
 
 export const Button = (props) => {
-  const { children, center, onClick, ...rest } = props;
+  const { children, center, onClick, letterSetBtn, ...rest } = props;
   const className = clsx({
     [styles.button]: true,
     [styles.centeredButton]: center,
   });
-  if (onClick && typeof onClick === "function") {
+
+  if (letterSetBtn) {
     return (
-      <button onClick={onClick} className={className}>
+      <Link onClick={onClick} className={className} {...rest}>
         {children}
-      </button>
+      </Link>
     );
   }
+  // if (onClick && typeof onClick === "function") {
   return (
-    <Link className={className} {...rest}>
+    <button onClick={onClick} className={className}>
       {children}
-    </Link>
+    </button>
   );
+  // }
 };
