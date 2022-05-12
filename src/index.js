@@ -3,10 +3,6 @@ import * as ReactDOMClient from "react-dom/client";
 import "./index.scss";
 import App from "./pages";
 import { HashRouter } from "react-router-dom";
-import amplitude from "amplitude-js";
-
-// Amplitude initialisation
-amplitude.getInstance().init("ae009176a3fe772cdf4973b50c43aef9");
 
 const container = document.getElementById("root");
 
