@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/wordreach/static/css/main.f965893c.css",
-    "main.js": "/wordreach/static/js/main.4ed636d9.js",
+    "main.js": "/wordreach/static/js/main.3ba814b9.js",
     "static/media/temp-logo.svg": "/wordreach/static/media/temp-logo.a3027f69373ac52b096231aacfb29a73.svg",
     "index.html": "/wordreach/index.html",
     "main.f965893c.css.map": "/wordreach/static/css/main.f965893c.css.map",
-    "main.4ed636d9.js.map": "/wordreach/static/js/main.4ed636d9.js.map"
+    "main.3ba814b9.js.map": "/wordreach/static/js/main.3ba814b9.js.map"
   },
   "entrypoints": [
     "static/css/main.f965893c.css",
-    "static/js/main.4ed636d9.js"
+    "static/js/main.3ba814b9.js"
   ]
 }
