@@ -7,6 +7,7 @@ import { Button } from "../../components/Button/Button";
 import { PlayedLetterTile } from "../../components/PlayedLetterTile/PlayedLetterTile";
 import { useParams } from "react-router-dom";
 import { getInitialLetters } from "../../lib/data/poc";
+import { logEvent } from "../../lib/analytics";
 
 const validateWord = async (word) => {
   const res = await fetch(
@@ -138,6 +139,7 @@ const getWordFromBoard = async (
       if (wordCheck) {
         hasFoundBranchedWord = true;
       } else {
+        logEvent("play attempt", { success: false, message: "invalid word" });
         alert(`${newWord} is not a valid word`);
         return false;
       }
@@ -165,7 +167,11 @@ const getWordFromBoard = async (
     ) {
       return word;
     }
-
+    logEvent("play attempt", {
+      success: false,
+      message:
+        "your word must start on the first column, or branch off another word",
+    });
     alert(
       `Your word (${word}) must start on the first column, or branch off another word`
     );
@@ -216,6 +222,7 @@ const getWordAxis = (board, playedLetters) => {
   }
 
   // todo: If only 1 letter played, then use the board state to find axis
+  logEvent("play attempt", { success: false, message: "only 1 letter played" });
   alert("You can't play a 1 letter word; that's a letter, not a word.");
   return false;
 };
@@ -228,6 +235,10 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   const arbitraryLetter = playedLetters[0];
 
   if (!arbitraryLetter) {
+    logEvent("play attempt", {
+      success: false,
+      message: "only 1 letter played",
+    });
     alert("Please play at least 1 letter");
     return false;
   }
@@ -250,6 +261,10 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   const axis = getWordAxis(playedBoard, playedLetters);
 
   if (!axis) {
+    logEvent("play attempt", {
+      success: false,
+      message: "invalid tile placement (no direction found)",
+    });
     alert("No axis found");
     return false;
   }
@@ -259,6 +274,10 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
       (l) => l.played[axis] === playedLetters[0].played[axis]
     )
   ) {
+    logEvent("play attempt", {
+      success: false,
+      message: "invalid tile placement (2 directions found)",
+    });
     alert("You can only play a word in one direction at a time");
     return false;
   }
@@ -294,6 +313,10 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   }
 
   if (spaceFoundInWord) {
+    logEvent("play attempt", {
+      success: false,
+      message: "space found in word",
+    });
     alert("You have a space in your word.");
     return false;
   }
@@ -306,7 +329,19 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   if (!wordOrError) {
     return false;
   }
-  return await validateWord(wordOrError);
+
+  const isValid = await validateWord(wordOrError);
+  logEvent("play attempt", {
+    success: isValid,
+    word: wordOrError,
+    message: "valid played word",
+  });
+
+  if (!isValid) {
+    alert(`${wordOrError} is not a valid word`);
+  }
+
+  return isValid;
 };
 
 const Challenge = () => {
@@ -323,7 +358,6 @@ const Challenge = () => {
   const confirmWord = async () => {
     const isValid = await checkPlayedWordIsValidOnBoard(board, playableLetters);
     if (!isValid) {
-      alert("Word not valid");
       return false;
     }
     setBoard((old) => {
@@ -360,6 +394,7 @@ const Challenge = () => {
         if (item.id === event.active.id) {
           // If the item is not dropped over a valid target then return the item to the playable list (not on the board)
           if (!event.over) {
+            logEvent("tile action", { dropped: "off the board" });
             return { ...item, played: false };
           }
           // This is destructuring, we're pulling row and column out of element.over.data.current into it's own variable
@@ -367,6 +402,7 @@ const Challenge = () => {
 
           // if the board has a staticLetter, don't do anything (put it back where it was)
           if (board[row][column] !== "") {
+            logEvent("tile action", { dropped: "over existing letter" });
             return item;
           }
 
@@ -378,11 +414,13 @@ const Challenge = () => {
           if (found) {
             // Set pieceToUpdate to the found playedLetter and update it's played position to the current item's played position
             // (we don't return in this statement because we have no other things to check for and we just want to play the move)
+            logEvent("tile action", { dropped: "over existing tile" });
             pieceToUpdate = {
               ...found,
               played: item.played,
             };
           }
+          logEvent("tile action", { dropped: "on a free space" });
           // play the move
           return { ...item, played: { row, column } };
         }

@@ -1,20 +1,10 @@
 import { React } from "react";
 import { Button } from "../../components/Button/Button";
-import amplitude from "amplitude-js";
 
 const Home = () => {
-  const sendAmplitudeEvent = (setNumber) => {
-    console.log(setNumber);
-    var event = "Button Clicked";
-    var eventProperties = {
-      selectedLetterSet: setNumber,
-    };
-    amplitude.getInstance().logEvent(event, eventProperties);
-  };
-
   return (
     <div>
-      <Button center to="/challenge/1" onClick={sendAmplitudeEvent(1)}>
+      <Button center to="/challenge/1">
         Letter set 1
       </Button>
       <Button center to="/challenge/2">
