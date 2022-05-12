@@ -1,11 +1,11 @@
-import { React, useState } from "react";
+import { React, useEffect, useMemo, useState } from "react";
 import LetterBox from "../../components/LetterBox/LetterBox";
 import { DndContext } from "@dnd-kit/core";
 import { Draggable } from "../../components/Draggable/Draggable";
 import styles from "./Challenge.module.scss";
 import { Button } from "../../components/Button/Button";
 import { PlayedLetterTile } from "../../components/PlayedLetterTile/PlayedLetterTile";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { getInitialLetters } from "../../lib/data/poc";
 import { logEvent } from "../../lib/analytics";
 
@@ -334,6 +334,7 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   logEvent("play attempt", {
     success: isValid,
     word: wordOrError,
+    time: new Date().toISOString(),
     message: "valid played word",
   });
 
@@ -344,18 +345,41 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   return isValid;
 };
 
+const getSavedGameState = () => {
+  return window.localStorage.getItem("gameSaves") ?? "{}";
+};
+
+const updateSavedGameState = (key, gameState) => {
+  window.localStorage.setItem(
+    "gameSaves",
+    JSON.stringify({ [key]: gameState })
+  );
+};
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
+
 const Challenge = () => {
+  const query = useQuery();
   let { letterSet } = useParams();
   if (!letterSet) {
     letterSet = 1;
   }
+  const [isLoading, setIsLoading] = useState(true);
   const [board, setBoard] = useState(initialBoardState);
   const [playableLetters, setPlayableLetters] = useState(
     getInitialLetters(letterSet)
   );
+  const [attempts, setAttempts] = useState(0);
+  const [turns, setTurns] = useState(0);
   const [hasWon, setHasWon] = useState(false);
 
   const confirmWord = async () => {
+    console.log("setting attempts");
+    setAttempts((i) => i + 1);
     const isValid = await checkPlayedWordIsValidOnBoard(board, playableLetters);
     if (!isValid) {
       return false;
@@ -381,6 +405,8 @@ const Challenge = () => {
     setPlayableLetters((old) => {
       return old.filter((letter) => letter.played === false);
     });
+    console.log("setting turns");
+    setTurns((i) => i + 1);
   };
 
   const handleDragStart = (event) => {};
@@ -441,6 +467,38 @@ const Challenge = () => {
     });
   };
 
+  useEffect(() => {
+    try {
+      const savedGameState = JSON.parse(getSavedGameState());
+      console.log(savedGameState);
+      if (savedGameState[letterSet]) {
+        setBoard(savedGameState[letterSet].board);
+        setPlayableLetters(savedGameState[letterSet].playableLetters);
+        setHasWon(savedGameState[letterSet].hasWon ?? false);
+        setAttempts(savedGameState[letterSet].attempts);
+        setTurns(savedGameState[letterSet].turns);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+    setIsLoading(false);
+  }, [letterSet]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      updateSavedGameState(letterSet, {
+        board,
+        playableLetters,
+        hasWon,
+        attempts,
+        turns,
+      });
+    }
+  }, [board, playableLetters, letterSet, isLoading, hasWon, turns, attempts]);
+
+  if (isLoading) {
+    return "Loading...";
+  }
   return (
     <div className={styles.wrapper}>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -521,6 +579,29 @@ const Challenge = () => {
           PLAY MOVE
         </Button>
       )}
+      {query.get("dev") ? (
+        <>
+          <p>Turns: {turns}</p>
+          <p>Attempts: {attempts}</p>
+          <p>HasWon: {hasWon}</p>
+          <p>LettersUsed: {24 - playableLetters.length}</p>
+          <p>LettersLeft: {playableLetters.length}</p>
+
+          <button
+            onClick={() => {
+              window.localStorage.clear();
+              setIsLoading(false);
+              setBoard(initialBoardState);
+              setPlayableLetters(getInitialLetters(letterSet));
+              setAttempts(0);
+              setTurns(0);
+              setHasWon(false);
+            }}
+          >
+            RESET GAME
+          </button>
+        </>
+      ) : null}
     </div>
   );
 };
