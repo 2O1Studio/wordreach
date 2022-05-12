@@ -1,7 +1,7 @@
 import amplitude from "amplitude-js";
 
 export const logEvent = (event, eventProperties) => {
-  if (!process.env.AMPLITUDE_KEY) {
+  if (process.env.AMPLITUDE_KEY) {
     amplitude.getInstance().logEvent(event, eventProperties);
   }
 };
