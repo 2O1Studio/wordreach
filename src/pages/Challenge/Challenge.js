@@ -546,9 +546,42 @@ const Challenge = () => {
             >
               Well done, you've reached the other side!
             </p>
-            <Button center to="/">
-              Play again
-            </Button>
+            <p
+              style={{
+                textAlign: "center",
+                marginTop: 10,
+                marginBottom: 20,
+              }}
+            >
+              <br />
+              It took you {turns} turns to win!
+              <br />
+              You made {attempts - turns} invalid moves
+              <br />
+              You used {24 - playableLetters.length} letters out of 24
+              <br />
+              You had {playableLetters.length} letters left
+            </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "12px",
+                maxWidth: "400px",
+                margin: "0 auto",
+              }}
+            >
+              <Button center to="/">
+                Play again
+              </Button>
+              <Button
+                isButton
+                center
+                onClick={() => alert("Sorry, work in progress!")}
+              >
+                Share your score
+              </Button>
+            </div>
           </div>
         ) : (
           <div className={styles.playableLettersWrap}>
