@@ -345,15 +345,12 @@ const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   return isValid;
 };
 
-const getSavedGameState = () => {
-  return window.localStorage.getItem("gameSaves") ?? "{}";
+const getSavedGameState = (key) => {
+  return window.localStorage.getItem(`gameSaves${key}`) ?? null;
 };
 
 const updateSavedGameState = (key, gameState) => {
-  window.localStorage.setItem(
-    "gameSaves",
-    JSON.stringify({ [key]: gameState })
-  );
+  window.localStorage.setItem(`gameSaves${key}`, JSON.stringify(gameState));
 };
 
 function useQuery() {
@@ -469,18 +466,17 @@ const Challenge = () => {
 
   useEffect(() => {
     try {
-      const savedGameState = JSON.parse(getSavedGameState());
-      console.log(savedGameState);
-      if (savedGameState[letterSet]) {
-        logEvent("game stated", {
+      const savedGameState = JSON.parse(getSavedGameState(letterSet));
+      if (savedGameState) {
+        logEvent("game started", {
           gameId: letterSet,
           time: new Date().toISOString(),
         });
-        setBoard(savedGameState[letterSet].board);
-        setPlayableLetters(savedGameState[letterSet].playableLetters);
-        setHasWon(savedGameState[letterSet].hasWon ?? false);
-        setAttempts(savedGameState[letterSet].attempts);
-        setTurns(savedGameState[letterSet].turns);
+        setBoard(savedGameState.board);
+        setPlayableLetters(savedGameState.playableLetters);
+        setHasWon(savedGameState.hasWon ?? false);
+        setAttempts(savedGameState.attempts);
+        setTurns(savedGameState.turns);
       }
     } catch (error) {
       console.error(error);
@@ -506,7 +502,7 @@ const Challenge = () => {
         time: new Date().toISOString(),
       });
     }
-  }, [hasWon]);
+  }, [hasWon, letterSet]);
 
   if (isLoading) {
     return "Loading...";
@@ -634,7 +630,7 @@ const Challenge = () => {
 
           <button
             onClick={() => {
-              window.localStorage.clear();
+              window.localStorage.removeItem(`gameSaves${letterSet}`);
               setIsLoading(false);
               setBoard(initialBoardState);
               setPlayableLetters(getInitialLetters(letterSet));
