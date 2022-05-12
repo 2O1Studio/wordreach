@@ -472,6 +472,10 @@ const Challenge = () => {
       const savedGameState = JSON.parse(getSavedGameState());
       console.log(savedGameState);
       if (savedGameState[letterSet]) {
+        logEvent("game stated", {
+          gameId: letterSet,
+          time: new Date().toISOString(),
+        });
         setBoard(savedGameState[letterSet].board);
         setPlayableLetters(savedGameState[letterSet].playableLetters);
         setHasWon(savedGameState[letterSet].hasWon ?? false);
@@ -495,6 +499,14 @@ const Challenge = () => {
       });
     }
   }, [board, playableLetters, letterSet, isLoading, hasWon, turns, attempts]);
+  useEffect(() => {
+    if (hasWon) {
+      logEvent("game ended", {
+        gameId: letterSet,
+        time: new Date().toISOString(),
+      });
+    }
+  }, [hasWon]);
 
   if (isLoading) {
     return "Loading...";
