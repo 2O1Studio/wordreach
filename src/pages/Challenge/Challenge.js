@@ -479,7 +479,7 @@ const Challenge = () => {
           .fill("")
           .map((c, i) => <div key={i} className="confetti-piece" />)
       ) : (
-        <Button center onClick={confirmWord}>
+        <Button isButton center onClick={confirmWord}>
           PLAY MOVE
         </Button>
       )}

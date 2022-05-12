@@ -14,12 +14,7 @@ const Home = () => {
 
   return (
     <div>
-      <Button
-        center
-        to="/challenge/1"
-        letterSetBtn={true}
-        onClick={sendAmplitudeEvent(1)}
-      >
+      <Button center to="/challenge/1" onClick={sendAmplitudeEvent(1)}>
         Letter set 1
       </Button>
       <Button center to="/challenge/2">
