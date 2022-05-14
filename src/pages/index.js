@@ -22,9 +22,14 @@ const App = () => {
           marginTop: 10,
           marginBottom: 20,
           fontWeight: 600,
+          padding: "0 15px",
+          maxWidth: "400px",
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
-        To win, you need to cross the board from blue to green <br/>by creating words from your given letters!
+        To win, you need to cross the board from blue to green by creating words
+        from your given letters!
       </p>
 
       <Routes>
