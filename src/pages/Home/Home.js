@@ -22,6 +22,9 @@ const Home = () => {
       <Button center to="/challenge/6">
         Letter set 6
       </Button>
+      <Button center to="/challenge/7">
+        Letter set 7
+      </Button>
     </div>
   );
 };

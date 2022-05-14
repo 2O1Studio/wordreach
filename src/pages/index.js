@@ -24,9 +24,7 @@ const App = () => {
           fontWeight: 600,
         }}
       >
-        Cross the board from blue to green
-        <br />
-        with as few a words inbetween
+        To win, you need to cross the board from blue to green <br/>by creating words from your given letters!
       </p>
 
       <Routes>
