@@ -36,12 +36,16 @@ export const Feedback = () => {
 
   const [hasSubmitted, setHasSubmitted] = useState(false);
 
+  const getResultValue = (questionNumber) => {
+    return formData[questionNumber].options[selectedFormValues[questionNumber]];
+  };
+
   const handleOnSubmit = (e) => {
     e.preventDefault();
     logEvent("feedback", {
-      enjoyability: 0,
-      difficulty: 0,
-      shareability: 0,
+      enjoyability: getResultValue(0),
+      difficulty: getResultValue(1),
+      shareability: getResultValue(2),
     });
     setHasSubmitted(true);
   };
