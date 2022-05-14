@@ -1,5 +1,16 @@
 import { logEvent } from "../analytics";
 
+class GameValidation extends Error {
+  constructor(message = "", ...args) {
+    super(message, ...args);
+    this.name = "Game Validation";
+  }
+}
+
+const customThrow = (message) => {
+  throw new GameValidation(message);
+};
+
 export const validateWord = async (word) => {
   const res = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
@@ -127,7 +138,7 @@ export const getWordFromBoard = async (
         hasFoundBranchedWord = true;
       } else {
         logEvent("play attempt", { success: false, message: "invalid word" });
-        alert(`${newWord} is not a valid word`);
+        customThrow(`${newWord} is not a valid word`);
         return false;
       }
     }
@@ -159,7 +170,7 @@ export const getWordFromBoard = async (
       message:
         "your word must start on the first column, or branch off another word",
     });
-    alert(
+    customThrow(
       `Your word (${word}) must start on the first column, or branch off another word`
     );
     return false;
@@ -210,7 +221,7 @@ export const getWordAxis = (board, playedLetters) => {
 
   // todo: If only 1 letter played, then use the board state to find axis
   logEvent("play attempt", { success: false, message: "only 1 letter played" });
-  alert("You can't play a 1 letter word; that's a letter, not a word.");
+  customThrow("You can't play a 1 letter word; that's a letter, not a word.");
   return false;
 };
 
@@ -226,7 +237,7 @@ export const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
       success: false,
       message: "only 1 letter played",
     });
-    alert("Please play at least 1 letter");
+    customThrow("Please play at least 1 letter");
     return false;
   }
 
@@ -252,7 +263,7 @@ export const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
       success: false,
       message: "invalid tile placement (no direction found)",
     });
-    alert("No axis found");
+    customThrow("No axis found");
     return false;
   }
 
@@ -265,7 +276,7 @@ export const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
       success: false,
       message: "invalid tile placement (2 directions found)",
     });
-    alert("You can only play a word in one direction at a time");
+    customThrow("You can only play a word in one direction at a time");
     return false;
   }
   const oppositeAxis = axis === "row" ? "column" : "row";
@@ -304,7 +315,7 @@ export const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
       success: false,
       message: "space found in word",
     });
-    alert("You have a space in your word.");
+    customThrow("You have a space in your word.");
     return false;
   }
   const wordOrError = await getWordFromBoard(
@@ -326,7 +337,7 @@ export const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
   });
 
   if (!isValid) {
-    alert(`${wordOrError} is not a valid word`);
+    customThrow(`${wordOrError} is not a valid word`);
   }
 
   return isValid;

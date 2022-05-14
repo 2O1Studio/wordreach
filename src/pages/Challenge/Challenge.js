@@ -15,6 +15,7 @@ import {
   initialBoardState,
   updateSavedGameState,
 } from "../../lib/game/validation";
+import { useAlert } from "@blaumaus/react-alert";
 
 function useQuery() {
   const { search } = useLocation();
@@ -41,6 +42,7 @@ export const LetterTile = ({
 };
 
 const Challenge = () => {
+  const alert = useAlert();
   const query = useQuery();
   let { letterSet } = useParams();
   if (!letterSet) {
@@ -59,9 +61,21 @@ const Challenge = () => {
 
   const confirmWord = async () => {
     setAttempts((i) => i + 1);
-    const isValid = await checkPlayedWordIsValidOnBoard(board, playableLetters);
-    if (!isValid) {
-      return false;
+    try {
+      const isValid = await checkPlayedWordIsValidOnBoard(
+        board,
+        playableLetters
+      );
+      if (!isValid) {
+        return false;
+      }
+    } catch (error) {
+      if (error.name === "Game Validation") {
+        alert.show(error.message);
+        return false;
+      } else {
+        throw error;
+      }
     }
     setBoard((old) => {
       return old.map((row, rowIndex) => {
@@ -310,7 +324,7 @@ const Challenge = () => {
               <Button
                 isButton
                 center
-                onClick={() => alert("Sorry, work in progress!")}
+                onClick={() => alert.show("Sorry, work in progress!")}
               >
                 Share your score
               </Button>
