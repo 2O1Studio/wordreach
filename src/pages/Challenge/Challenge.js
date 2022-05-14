@@ -8,356 +8,36 @@ import { PlayedLetterTile } from "../../components/PlayedLetterTile/PlayedLetter
 import { useLocation, useParams } from "react-router-dom";
 import { getInitialLetters } from "../../lib/data/poc";
 import { logEvent } from "../../lib/analytics";
-
-const validateWord = async (word) => {
-  const res = await fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
-  );
-  const status = await res.status;
-  if (status === 200) {
-    return true;
-  }
-  return false;
-};
-
-const initialBoardState = [
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-  ["", "", "", "", "", "", "", ""],
-];
-
-const LetterTile = ({ id, letter }) => {
-  return <Draggable id={id}>{letter.toUpperCase()}</Draggable>;
-};
-
-const checkPreviousPosition = (
-  board,
-  currentPosition,
-  axisToDecrement,
-  axis,
-  axisPosition
-) => {
-  let positionToCheck = currentPosition - 1;
-
-  if (positionToCheck < 0) {
-    return currentPosition;
-  }
-
-  const piece = board.find(
-    (i) => i[axisToDecrement] === positionToCheck && i[axis] === axisPosition
-  );
-
-  if (piece.letter !== "") {
-    return checkPreviousPosition(
-      board,
-      positionToCheck,
-      axisToDecrement,
-      axis,
-      axisPosition
-    );
-  }
-  return currentPosition;
-};
-
-const getFirstLetterOfWordOnBoard = (board, arbitraryLetter, axis) => {
-  const oppositeAxis = axis === "row" ? "column" : "row";
-  const startingPosition = arbitraryLetter.played[oppositeAxis];
-  const firstLetterPosition = checkPreviousPosition(
-    board,
-    startingPosition,
-    oppositeAxis,
-    axis,
-    arbitraryLetter.played[axis]
-  );
-  const firstFoundLetter = board.find(
-    (b) =>
-      b[axis] === arbitraryLetter.played[axis] &&
-      b[oppositeAxis] === firstLetterPosition
-  );
-  return {
-    letter: firstFoundLetter.letter,
-    [axis]: arbitraryLetter.played[axis],
-    [oppositeAxis]: firstLetterPosition,
-    static: firstFoundLetter.static,
-  };
-};
-
-const getWordFromBoard = async (
-  board,
-  firstLetter,
-  axis,
-  oppositeAxis,
-  shouldCheckOppositeAxis = true
-) => {
-  let word = "";
-  let hasStaticLetter = false;
-  let hasFoundBranchedWord = false;
-
-  const addLetterToWord = async (
-    board,
-    word,
-    currentLetter,
-    axis,
-    oppositeAxis
-  ) => {
-    // Check if current letter is part of another joined word in the opposite axis
-    if (
-      shouldCheckOppositeAxis &&
-      board.find(
-        (b) =>
-          b.letter !== "" &&
-          b[oppositeAxis] === currentLetter[oppositeAxis] &&
-          (b[axis] === currentLetter[axis] + 1 ||
-            b[axis] === currentLetter[axis] - 1)
-      )
-    ) {
-      const newFirstLetter = getFirstLetterOfWordOnBoard(
-        board,
-        {
-          currentLetter,
-          played: {
-            row: currentLetter.row,
-            column: currentLetter.column,
-          },
-        },
-        oppositeAxis
-      );
-      const newWord = await getWordFromBoard(
-        board,
-        newFirstLetter,
-        oppositeAxis,
-        axis,
-        false
-      );
-
-      const wordCheck = await validateWord(newWord);
-      if (wordCheck) {
-        hasFoundBranchedWord = true;
-      } else {
-        logEvent("play attempt", { success: false, message: "invalid word" });
-        alert(`${newWord} is not a valid word`);
-        return false;
-      }
-    }
-
-    // Get next letter
-    word = word + currentLetter.letter;
-    const nextLetter = board.find(
-      (b) =>
-        b[axis] === currentLetter[axis] &&
-        b[oppositeAxis] === currentLetter[oppositeAxis] + 1
-    );
-    if (currentLetter.static === true) {
-      hasStaticLetter = true;
-    }
-    if (nextLetter && nextLetter.letter !== "") {
-      return await addLetterToWord(board, word, nextLetter, axis, oppositeAxis);
-    }
-
-    if (
-      firstLetter.column === 0 ||
-      hasStaticLetter ||
-      (hasFoundBranchedWord === true && shouldCheckOppositeAxis === true) ||
-      shouldCheckOppositeAxis === false
-    ) {
-      return word;
-    }
-    logEvent("play attempt", {
-      success: false,
-      message:
-        "your word must start on the first column, or branch off another word",
-    });
-    alert(
-      `Your word (${word}) must start on the first column, or branch off another word`
-    );
-    return false;
-  };
-
-  return await addLetterToWord(board, word, firstLetter, axis, oppositeAxis);
-};
-
-const getWordAxis = (board, playedLetters) => {
-  if (playedLetters.length > 1) {
-    return playedLetters[0].played.row === playedLetters[1].played.row
-      ? "row"
-      : "column";
-  }
-
-  //Check adjacent board pieces
-
-  const letter = playedLetters[0].played;
-  if (
-    board.find((b) => {
-      if (
-        b.letter !== "" &&
-        b.row === letter.row &&
-        (b.column === letter.column - 1 || b.column === letter.column + 1)
-      ) {
-        return true;
-      }
-      return false;
-    })
-  ) {
-    return "row";
-  }
-
-  if (
-    board.find((b) => {
-      if (
-        b.letter !== "" &&
-        b.column === letter.column &&
-        (b.row === letter.row - 1 || b.row === letter.row + 1)
-      ) {
-        return true;
-      }
-      return false;
-    })
-  ) {
-    return "column";
-  }
-
-  // todo: If only 1 letter played, then use the board state to find axis
-  logEvent("play attempt", { success: false, message: "only 1 letter played" });
-  alert("You can't play a 1 letter word; that's a letter, not a word.");
-  return false;
-};
-
-const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
-  const playedLetters = playableLetters.filter((l) => l.played !== false);
-  if (playedLetters === 0) {
-    return false;
-  }
-  const arbitraryLetter = playedLetters[0];
-
-  if (!arbitraryLetter) {
-    logEvent("play attempt", {
-      success: false,
-      message: "only 1 letter played",
-    });
-    alert("Please play at least 1 letter");
-    return false;
-  }
-
-  const playedBoard = board.flatMap((row, rowIndex) => {
-    return row.flatMap((letter, columnIndex) => {
-      const foundLetter = playableLetters.find(
-        (l) => l.played.column === columnIndex && l.played.row === rowIndex
-      );
-
-      return {
-        letter: foundLetter ? foundLetter.letter : letter,
-        static: foundLetter ? false : true,
-        row: rowIndex,
-        column: columnIndex,
-      };
-    });
-  });
-
-  const axis = getWordAxis(playedBoard, playedLetters);
-
-  if (!axis) {
-    logEvent("play attempt", {
-      success: false,
-      message: "invalid tile placement (no direction found)",
-    });
-    alert("No axis found");
-    return false;
-  }
-
-  if (
-    !playedLetters.every(
-      (l) => l.played[axis] === playedLetters[0].played[axis]
-    )
-  ) {
-    logEvent("play attempt", {
-      success: false,
-      message: "invalid tile placement (2 directions found)",
-    });
-    alert("You can only play a word in one direction at a time");
-    return false;
-  }
-  const oppositeAxis = axis === "row" ? "column" : "row";
-
-  // This looks backwards to find the first letter
-  const firstLetter = getFirstLetterOfWordOnBoard(
-    playedBoard,
-    arbitraryLetter,
-    axis
-  );
-
-  const boardInAxisDirection = playedBoard.filter((b) => {
-    return b[axis] === firstLetter[axis];
-  });
-  let blankSpaceFound = false;
-  let spaceFoundInWord = false;
-  for (
-    let i = firstLetter[oppositeAxis];
-    i < boardInAxisDirection.length;
-    i++
-  ) {
-    const element = boardInAxisDirection[i];
-    if (spaceFoundInWord) {
-      continue;
-    }
-    if (blankSpaceFound && element.letter !== "" && element.static === false) {
-      spaceFoundInWord = true;
-    }
-    if (element.letter === "") {
-      blankSpaceFound = true;
-    }
-  }
-
-  if (spaceFoundInWord) {
-    logEvent("play attempt", {
-      success: false,
-      message: "space found in word",
-    });
-    alert("You have a space in your word.");
-    return false;
-  }
-  const wordOrError = await getWordFromBoard(
-    playedBoard,
-    firstLetter,
-    axis,
-    oppositeAxis
-  );
-  if (!wordOrError) {
-    return false;
-  }
-
-  const isValid = await validateWord(wordOrError);
-  logEvent("play attempt", {
-    success: isValid,
-    word: wordOrError,
-    time: new Date().toISOString(),
-    message: "valid played word",
-  });
-
-  if (!isValid) {
-    alert(`${wordOrError} is not a valid word`);
-  }
-
-  return isValid;
-};
-
-const getSavedGameState = (key) => {
-  return window.localStorage.getItem(`gameSaves${key}`) ?? null;
-};
-
-const updateSavedGameState = (key, gameState) => {
-  window.localStorage.setItem(`gameSaves${key}`, JSON.stringify(gameState));
-};
+import {
+  checkPlayedWordIsValidOnBoard,
+  getSavedGameState,
+  initialBoardState,
+  updateSavedGameState,
+} from "../../lib/game/validation";
 
 function useQuery() {
   const { search } = useLocation();
-
   return useMemo(() => new URLSearchParams(search), [search]);
 }
+
+export const LetterTile = ({
+  id,
+  letter,
+  isActive,
+  setActiveTile,
+  disablePointerEvent,
+}) => {
+  return (
+    <Draggable
+      isActive={isActive}
+      id={id}
+      setActiveTile={setActiveTile}
+      disablePointerEvent={disablePointerEvent}
+    >
+      {letter.toUpperCase()}
+    </Draggable>
+  );
+};
 
 const Challenge = () => {
   const query = useQuery();
@@ -374,8 +54,9 @@ const Challenge = () => {
   const [turns, setTurns] = useState(0);
   const [hasWon, setHasWon] = useState(false);
 
+  const [activeTile, setActiveTile] = useState(null);
+
   const confirmWord = async () => {
-    console.log("setting attempts");
     setAttempts((i) => i + 1);
     const isValid = await checkPlayedWordIsValidOnBoard(board, playableLetters);
     if (!isValid) {
@@ -402,41 +83,43 @@ const Challenge = () => {
     setPlayableLetters((old) => {
       return old.filter((letter) => letter.played === false);
     });
-    console.log("setting turns");
     setTurns((i) => i + 1);
   };
 
   const handleDragStart = (event) => {};
 
   const handleDragEnd = (event) => {
+    if (
+      event.delta &&
+      event.delta.x < 10 &&
+      event.delta.y < 10 &&
+      event.delta.x > -10 &&
+      event.delta.y > -10
+    ) {
+      if (event.active.id === activeTile) {
+        return setActiveTile(null);
+      }
+      return setActiveTile(event.active.id);
+    }
     setPlayableLetters((oldSet) => {
       let pieceToUpdate;
 
       const newSet = oldSet.map((item) => {
-        // Check if the item we're mapping over has the id of the item that has been dropped
         if (item.id === event.active.id) {
-          // If the item is not dropped over a valid target then return the item to the playable list (not on the board)
+          // This will never be run for tap events, only drag events
           if (!event.over) {
             logEvent("tile action", { dropped: "off the board" });
             return { ...item, played: false };
           }
-          // This is destructuring, we're pulling row and column out of element.over.data.current into it's own variable
           const { row, column } = event.over.data.current;
-
-          // if the board has a staticLetter, don't do anything (put it back where it was)
           if (board[row][column] !== "") {
             logEvent("tile action", { dropped: "over existing letter" });
             return item;
           }
-
-          // Look through the list of playable letter to find a letter with a played row and column of the dropped box
           const found = playableLetters.find(
             (o) => o.played?.row === row && o.played?.column === column
           );
-
           if (found) {
-            // Set pieceToUpdate to the found playedLetter and update it's played position to the current item's played position
-            // (we don't return in this statement because we have no other things to check for and we just want to play the move)
             logEvent("tile action", { dropped: "over existing tile" });
             pieceToUpdate = {
               ...found,
@@ -444,9 +127,10 @@ const Challenge = () => {
             };
           }
           logEvent("tile action", { dropped: "on a free space" });
-          // play the move
           return { ...item, played: { row, column } };
         }
+
+        setActiveTile(null);
 
         return item;
       });
@@ -464,6 +148,23 @@ const Challenge = () => {
     });
   };
 
+  const clickOnBoard = (boardData) => {
+    const syntheticEvent = {
+      active: {
+        id: activeTile,
+      },
+      over: {
+        data: {
+          current: {
+            row: boardData.row,
+            column: boardData.column,
+          },
+        },
+      },
+    };
+    handleDragEnd(syntheticEvent);
+  };
+
   useEffect(() => {
     try {
       const savedGameState = JSON.parse(getSavedGameState(letterSet));
@@ -478,9 +179,7 @@ const Challenge = () => {
         setAttempts(savedGameState.attempts);
         setTurns(savedGameState.turns);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
     setIsLoading(false);
   }, [letterSet]);
 
@@ -523,11 +222,17 @@ const Challenge = () => {
                   column={columnIndex}
                   id={`r${rowIndex}c${columnIndex}`}
                   key={`r${rowIndex}c${columnIndex}`}
+                  onClick={clickOnBoard}
                   chosenLetter={
                     playedLetter ? (
                       <LetterTile
+                        setActiveTile={setActiveTile}
                         id={playedLetter.id}
                         letter={playedLetter.letter}
+                        isActive={activeTile === playedLetter.id}
+                        disablePointerEvent={
+                          activeTile !== null && activeTile !== playedLetter.id
+                        }
                       />
                     ) : staticLetter === "" ? (
                       ""
@@ -604,6 +309,7 @@ const Challenge = () => {
                 <LetterTile
                   key={letter.id}
                   letter={letter.letter}
+                  isActive={activeTile === letter.id}
                   id={letter.id}
                 />
               );

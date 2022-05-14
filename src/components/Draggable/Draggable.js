@@ -2,6 +2,7 @@ import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { CSS } from "@dnd-kit/utilities";
 import "./Draggable.scss";
+import clsx from "clsx";
 
 export function Draggable(props) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
@@ -12,12 +13,17 @@ export function Draggable(props) {
   const style = {
     transform: CSS.Translate.toString(transform),
     touchAction: "none",
+    ...(props.disablePointerEvent ? { pointerEvents: "none" } : {}),
   };
 
   return (
     <button
       ref={setNodeRef}
-      className={`draggable ${isDragging ? "draggableIsDragging" : ""}`}
+      className={clsx({
+        draggableIsDragging: isDragging,
+        draggable: true,
+        draggableIsActive: props.isActive,
+      })}
       style={style}
       {...listeners}
       {...attributes}
