@@ -5,6 +5,9 @@ import App from "./pages";
 import { HashRouter } from "react-router-dom";
 import { Provider as AlertProvider } from "@blaumaus/react-alert";
 import AlertTemplate from "./components/Alert/Alert";
+import { initializeAnalytics } from "./lib/analytics";
+
+initializeAnalytics();
 
 const container = document.getElementById("root");
 
