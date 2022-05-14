@@ -52,7 +52,6 @@ export const Feedback = () => {
   return (
     <form ref={form} onSubmit={handleOnSubmit}>
       {formData.map((question, q) => {
-        console.log(selectedFormValues[q]);
         return (
           <fieldset key={question.label}>
             <legend>{question.label}</legend>
@@ -62,7 +61,6 @@ export const Feedback = () => {
                   type="radio"
                   checked={selectedFormValues[q] === i}
                   onChange={(e) => {
-                    console.log(e);
                     setSelectedFormValues((f) =>
                       f.map((f, fi) => {
                         if (fi !== q) return f;
