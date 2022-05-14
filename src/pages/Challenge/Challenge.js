@@ -297,6 +297,7 @@ const Challenge = () => {
             <div
               style={{
                 display: "flex",
+                flexWrap: "wrap",
                 justifyContent: "center",
                 gap: "12px",
                 maxWidth: "400px",
