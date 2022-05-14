@@ -91,10 +91,10 @@ const Challenge = () => {
   const handleDragEnd = (event) => {
     if (
       event.delta &&
-      event.delta.x < 10 &&
-      event.delta.y < 10 &&
-      event.delta.x > -10 &&
-      event.delta.y > -10
+      event.delta.x < 70 &&
+      event.delta.y < 70 &&
+      event.delta.x > -70 &&
+      event.delta.y > -70
     ) {
       if (event.active.id === activeTile) {
         return setActiveTile(null);
@@ -203,6 +203,21 @@ const Challenge = () => {
     }
   }, [hasWon, letterSet]);
 
+  const placeActiveTileBackToPlayableArea = () => {
+    if (!activeTile) return;
+
+    setPlayableLetters((letters) => {
+      return letters.map((letter) => {
+        if (letter.id !== activeTile) return letter;
+        return {
+          ...letter,
+          played: false,
+        };
+      });
+    });
+    setActiveTile(null);
+  };
+
   if (isLoading) {
     return "Loading...";
   }
@@ -222,6 +237,8 @@ const Challenge = () => {
                   column={columnIndex}
                   id={`r${rowIndex}c${columnIndex}`}
                   key={`r${rowIndex}c${columnIndex}`}
+                  activeTile={activeTile}
+                  playableLetters={playableLetters}
                   onClick={clickOnBoard}
                   chosenLetter={
                     playedLetter ? (
@@ -297,7 +314,10 @@ const Challenge = () => {
             </div>
           </div>
         ) : (
-          <div className={styles.playableLettersWrap}>
+          <div
+            className={styles.playableLettersWrap}
+            onClick={placeActiveTileBackToPlayableArea}
+          >
             {playableLetters.map((letter, index) => {
               if (index >= 6) {
                 return null;

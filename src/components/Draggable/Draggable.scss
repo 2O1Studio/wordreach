@@ -4,7 +4,7 @@
   background-color: $beige400;
   position: relative;
   border-radius: 5px;
-  border: 2px solid rgba(0,0,0,0.6);
+  border: 2px solid rgba(0,0,0,0.3);
   
   width: 42px;
   height: 42px;
@@ -21,9 +21,50 @@
 
 .draggablePlayed {
   background-color: $beige200;
-  border-color: rgba(0,0,0,0.3);
+  border-color: rgba(0,0,0,0.6);
+  transform-origin: bottom center;
 }
 
-.draggableIsActive {
-  background-color: red;;
+@keyframes bounce {
+  from,
+  4.0%,
+  10.6%,
+  20%,
+  to {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+
+  8.0%,
+  8.6% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -10px, 0) scaleY(1.1);
+  }
+
+  14.0% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -6px, 0) scaleY(1.05);
+  }
+
+  16.0% {
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0) scaleY(0.95);
+  }
+  18.0% {
+    transform: translate3d(0, -2px, 0) scaleY(1.02);
+  }
+}
+
+
+.draggableIsActive:not(.draggableIsDragging) {
+  border-color: rgba(0,0,0,0.6);
+  box-shadow:0 4px 8px -2px rgb(0 0 0 / 45%);
+  transition: box-shadow, transform 0.2s ease-in-out;
+  transform: scale(1.03);
+  animation-name: bounce;
+  transform-origin: center bottom;
+  animation-delay: 0;
+  animation-iteration-count: 2;
+  animation-duration: 5.5s;
+  animation-fill-mode: both;
 }
