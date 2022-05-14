@@ -16,14 +16,6 @@ const alertStyle = {
   width: "320px",
 };
 
-const buttonStyle = {
-  marginLeft: "20px",
-  border: "none",
-  backgroundColor: "transparent",
-  cursor: "pointer",
-  color: "black",
-};
-
 const AlertTemplate = ({ message, options, style, close }) => {
   return (
     <div style={{ ...alertStyle, ...style }} onClick={close}>

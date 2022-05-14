@@ -238,47 +238,51 @@ const Challenge = () => {
     return "Loading...";
   }
   return (
-    <div className={styles.wrapper}>
+    <>
       <DndContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
-        <div className={styles.letterGrid}>
-          {board.map((row, rowIndex) => {
-            return row.map((staticLetter, columnIndex) => {
-              const playedLetter = playableLetters.find(
-                (o) =>
-                  o.played?.row === rowIndex && o.played?.column === columnIndex
-              );
-              return (
-                <LetterBox
-                  row={rowIndex}
-                  column={columnIndex}
-                  id={`r${rowIndex}c${columnIndex}`}
-                  key={`r${rowIndex}c${columnIndex}`}
-                  activeTile={activeTile}
-                  playableLetters={playableLetters}
-                  onClick={clickOnBoard}
-                  chosenLetter={
-                    playedLetter ? (
-                      <LetterTile
-                        setActiveTile={setActiveTile}
-                        id={playedLetter.id}
-                        letter={playedLetter.letter}
-                        isActive={activeTile === playedLetter.id}
-                        disablePointerEvent={
-                          activeTile !== null && activeTile !== playedLetter.id
-                        }
-                      />
-                    ) : staticLetter === "" ? (
-                      ""
-                    ) : (
-                      <PlayedLetterTile>
-                        {staticLetter.toUpperCase()}
-                      </PlayedLetterTile>
-                    )
-                  }
-                />
-              );
-            });
-          })}
+        <div className={styles.wrapper}>
+          <div className={styles.letterGrid}>
+            {board.map((row, rowIndex) => {
+              return row.map((staticLetter, columnIndex) => {
+                const playedLetter = playableLetters.find(
+                  (o) =>
+                    o.played?.row === rowIndex &&
+                    o.played?.column === columnIndex
+                );
+                return (
+                  <LetterBox
+                    row={rowIndex}
+                    column={columnIndex}
+                    id={`r${rowIndex}c${columnIndex}`}
+                    key={`r${rowIndex}c${columnIndex}`}
+                    activeTile={activeTile}
+                    playableLetters={playableLetters}
+                    onClick={clickOnBoard}
+                    chosenLetter={
+                      playedLetter ? (
+                        <LetterTile
+                          setActiveTile={setActiveTile}
+                          id={playedLetter.id}
+                          letter={playedLetter.letter}
+                          isActive={activeTile === playedLetter.id}
+                          disablePointerEvent={
+                            activeTile !== null &&
+                            activeTile !== playedLetter.id
+                          }
+                        />
+                      ) : staticLetter === "" ? (
+                        ""
+                      ) : (
+                        <PlayedLetterTile>
+                          {staticLetter.toUpperCase()}
+                        </PlayedLetterTile>
+                      )
+                    }
+                  />
+                );
+              });
+            })}
+          </div>
         </div>
         {hasWon ? (
           <div>
@@ -387,7 +391,7 @@ const Challenge = () => {
           </button>
         </>
       ) : null}
-    </div>
+    </>
   );
 };
 
