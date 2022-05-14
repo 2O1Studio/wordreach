@@ -8,6 +8,7 @@ import { PlayedLetterTile } from "../../components/PlayedLetterTile/PlayedLetter
 import { useLocation, useParams } from "react-router-dom";
 import { getInitialLetters } from "../../lib/data/poc";
 import { logEvent } from "../../lib/analytics";
+import { Feedback } from "../../components/Feedback/Feedback";
 import {
   checkPlayedWordIsValidOnBoard,
   getSavedGameState,
@@ -99,6 +100,7 @@ const Challenge = () => {
       if (event.active.id === activeTile) {
         return setActiveTile(null);
       }
+      logEvent("tap");
       return setActiveTile(event.active.id);
     }
     setPlayableLetters((oldSet) => {
@@ -312,6 +314,7 @@ const Challenge = () => {
                 Share your score
               </Button>
             </div>
+            <Feedback />
           </div>
         ) : (
           <div

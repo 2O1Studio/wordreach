@@ -14,6 +14,7 @@ export const Button = (props) => {
       <button
         {...(typeof onClick === "function" ? { onClick: onClick } : {})}
         className={className}
+        {...rest}
       >
         {children}
       </button>
