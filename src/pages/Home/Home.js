@@ -1,9 +1,11 @@
 import { React } from "react";
 import { Button } from "../../components/Button/Button";
+import {InstructionModal} from "../../components/Modal/Modal";
 
 const Home = () => {
   return (
-    <div>
+    <>
+    <InstructionModal></InstructionModal>
       <Button center to="/challenge/1">
         Letter set 1
       </Button>
@@ -25,7 +27,7 @@ const Home = () => {
       <Button center to="/challenge/7">
         Letter set 7
       </Button>
-    </div>
+    </>
   );
 };
 
