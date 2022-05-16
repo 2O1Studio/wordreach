@@ -1,11 +1,16 @@
-import { React } from "react";
+import React from 'react';
 import { Button } from "../../components/Button/Button";
-import {InstructionModal} from "../../components/Modal/Modal";
+import { InstructionModal } from "../../components/Modal/Modal";
 
 const Home = () => {
+
+  const [open, setOpen] = React.useState(true);
+  const handleClose = () => setOpen(false);
+
+
   return (
     <>
-    <InstructionModal></InstructionModal>
+      <InstructionModal open={open} handleClose={handleClose} />
       <Button center to="/challenge/1">
         Letter set 1
       </Button>

@@ -6,6 +6,7 @@ import Challenge from "./Challenge/Challenge";
 // import Rules from "./Rules/Rules";
 import Logo from "../assets/temp-logo.svg";
 import styles from "./index.module.scss";
+import Footer from "../components/Footer/Footer";
 
 const App = () => {
   return (
@@ -38,6 +39,7 @@ const App = () => {
         {/* <Route path="/rules" element={<Rules />} /> */}
         {/* <Route path="/about" element={<About />} /> */}
       </Routes>
+      <Footer />
     </div>
   );
 };
