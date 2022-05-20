@@ -101,7 +101,7 @@ const Challenge = () => {
     setTurns((i) => i + 1);
   };
 
-  const handleDragStart = (event) => {};
+  const handleDragStart = (event) => { };
 
   const handleDragEnd = (event) => {
     if (
@@ -195,7 +195,7 @@ const Challenge = () => {
         setAttempts(savedGameState.attempts);
         setTurns(savedGameState.turns);
       }
-    } catch (error) {}
+    } catch (error) { }
     setIsLoading(false);
   }, [letterSet]);
 
@@ -360,9 +360,11 @@ const Challenge = () => {
         )}
       </DndContext>
       {hasWon ? (
-        new Array(20)
-          .fill("")
-          .map((c, i) => <div key={i} className="confetti-piece" />)
+        <div>
+          {new Array(20)
+            .fill("")
+            .map((c, i) => <div key={i} className="confetti-piece" />)}
+        </div>
       ) : (
         <Button isButton center onClick={confirmWord}>
           PLAY MOVE
