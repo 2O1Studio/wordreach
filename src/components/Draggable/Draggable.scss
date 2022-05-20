@@ -1,18 +1,18 @@
-@import '../../assets/colours.scss';
+@import "../../assets/colours.scss";
 
 .draggable {
   background-color: $beige400;
   position: relative;
   border-radius: 5px;
-  border: 2px solid rgba(0,0,0,0.3);
-  
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  padding: 0;
   width: 42px;
   height: 42px;
   margin: 0 5px 0 5px;
   flex-shrink: 0;
   font-weight: 800;
   cursor: pointer;
-  color: rgba(0,0,0,0.6);
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .draggableIsDragging {
@@ -21,7 +21,7 @@
 
 .draggablePlayed {
   background-color: $beige200;
-  border-color: rgba(0,0,0,0.6);
+  border-color: rgba(0, 0, 0, 0.6);
   transform-origin: bottom center;
 }
 
@@ -55,10 +55,9 @@
   }
 }
 
-
 .draggableIsActive:not(.draggableIsDragging) {
-  border-color: rgba(0,0,0,0.6);
-  box-shadow:0 4px 8px -2px rgb(0 0 0 / 45%);
+  border-color: rgba(0, 0, 0, 0.6);
+  box-shadow: 0 4px 8px -2px rgb(0 0 0 / 45%);
   transition: box-shadow, transform 0.2s ease-in-out;
   transform: scale(1.03);
   animation-name: bounce;
