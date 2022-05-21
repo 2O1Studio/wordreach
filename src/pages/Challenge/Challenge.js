@@ -325,13 +325,13 @@ const Challenge = () => {
               <Button center to="/">
                 Play again
               </Button>
-              <Button
+              {/* <Button
                 isButton
                 center
                 onClick={() => alert.show("Sorry, work in progress!")}
               >
                 Share your score
-              </Button>
+              </Button> */}
             </div>
             <Feedback />
           </div>

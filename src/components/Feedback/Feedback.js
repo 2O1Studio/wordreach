@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { logEvent } from "../../lib/analytics";
 import { Button } from "../Button/Button";
+import "./Feedback.scss";
 const formData = [
   {
     label: "Did you enjoy playing Word Reach?",
@@ -84,6 +85,7 @@ export const Feedback = () => {
         disabled={selectedFormValues.some((i) => i === null)}
         isButton
         type="submit"
+        center
       >
         Submit my feedback
       </Button>

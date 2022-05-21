@@ -1,0 +1,28 @@
+form {
+    margin: 15px;
+}
+
+fieldset {
+    margin: 15px auto;
+    padding: 10px 15px 15px 15px;
+    background-color: #FAF8F2;
+    border-radius: 5px;
+    border: 2px solid #c7c5c0;
+    max-width: 400px;
+}
+
+legend {
+    font-weight: 600;
+    float: left;
+    margin-bottom: 7px;
+}
+
+label {
+    float: left;
+    clear: both;
+    padding-left: 7px;
+}
+
+label input {
+    margin-right: 12px;
+}
