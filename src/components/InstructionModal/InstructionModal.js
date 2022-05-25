@@ -16,14 +16,8 @@ export const InstructionModal = ({ isOpen, handleClose }) => {
         <Dialog.Description>
           Start by placing a letter in any blue box, and then create a word
           vertically or horizontally. To win, keep building off, or adding to
-          existing words until you reach a green box!
+          existing words until you reach a green box. Good luck!
         </Dialog.Description>
-
-        <p>
-          Are you sure you want to deactivate your account? All of your data
-          will be permanently removed. This action cannot be undone.
-        </p>
-        <p>Good luck</p>
 
         <img
           className="modalImg"

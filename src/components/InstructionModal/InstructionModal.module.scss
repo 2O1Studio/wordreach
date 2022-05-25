@@ -12,19 +12,24 @@
   @include fixedFullscreen;
   margin: auto;
   background-color: white;
-  max-width: 390px;
+  width: 390px;
+  max-width: calc(100% - 30px);
   text-align: center;
-  padding: 30px;
+  padding: 22px 16px;
   height: max-content;
-  max-height: 80vh;
+  max-height: 85vh;
   border: 2px solid black;
   box-shadow: 0 2px 12px -4px rgb(0 0 0 / 60%);
   overflow: auto;
   h2 {
-    margin-bottom: 1em;
+    margin-bottom: .6em;
   }
   p {
-    margin-bottom: 1em;
+    margin-bottom: .6em;
+    font-size: 14px;
+    @media (min-width: 600px) {
+      font-size: 16px;
+    }
   }
   img {
     display: block;
