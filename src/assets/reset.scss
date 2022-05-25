@@ -84,10 +84,6 @@ fieldset {
   height: 100vh;
   overflow: hidden;
   display: grid;
-  grid-template-areas: 
-    "header"
-    "content"
-    "footer"
-  ;
-  grid-template-rows: 70px calc(100% - 140px) 70px;
+  padding-top: calc(60px + 15px);
+  padding-bottom: 70px;
 }

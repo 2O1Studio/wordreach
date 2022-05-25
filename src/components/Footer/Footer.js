@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Footer.scss";
 import { InstructionModal } from "../InstructionModal/InstructionModal";
-import { Button } from "../Button/Button";
 
 const Footer = () => {
   const [isOpen, setIsOpen] = useState(false);
