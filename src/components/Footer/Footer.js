@@ -8,9 +8,9 @@ const Footer = () => {
 
   return (
     <footer className="footer">
-      <Button center isButton onClick={() => setIsOpen((o) => !o)}>
+      <button type="button" onClick={() => setIsOpen((o) => !o)}>
         How to play
-      </Button>
+      </button>
       <div className="copyright">
         &copy; 201Studio 2022. All rights reserved.
       </div>

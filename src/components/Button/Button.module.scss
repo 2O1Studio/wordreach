@@ -37,6 +37,13 @@
     pointer-events: none;
     opacity: 0.6;
   }
+  &:focus {
+    outline: none;
+  }
+  &:focus-visible {
+    // Wait for Chrome to fix their initial rendering focus
+    // outline: 3px $outline solid;
+  }
 }
 
 

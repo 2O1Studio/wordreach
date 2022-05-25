@@ -18,22 +18,6 @@ const App = () => {
       </div>
 
       <div className={styles.content}>
-        <p
-          style={{
-            textAlign: "center",
-            marginTop: 10,
-            marginBottom: 20,
-            fontWeight: 600,
-            padding: "0 15px",
-            maxWidth: "400px",
-            marginLeft: "auto",
-            marginRight: "auto",
-          }}
-        >
-          To win, you need to cross the board from blue to green by creating
-          words from your given letters!
-        </p>
-
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/challenge/:letterSet" element={<Challenge />} />
