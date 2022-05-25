@@ -1,15 +1,10 @@
 .footer {
-  margin-top: 40px;
+  background: white;
+  grid-area: footer;
   padding: 10px;
   border-top: 1px solid rgb(223, 223, 223);
-  // position: fixed;
-  // bottom: 0;
-  // left: 0;
   width: 100%;
   text-align: center;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: auto;
 }
 
 .copyright {

@@ -1,6 +1,7 @@
 @import '../assets/colours.scss';
 
 .header {
+  grid-area: header;
   display: flex;
   align-items: center;
   height: 70px;
@@ -10,3 +11,11 @@
     text-decoration: none;
   }
 }
+
+.content {
+  grid-area: content;
+  max-height: 100%;
+  overflow: auto;
+}
+
+

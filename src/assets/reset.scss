@@ -77,3 +77,17 @@ select {
 fieldset {
   margin-bottom: 15px;
 }
+
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-areas: 
+    "header"
+    "content"
+    "footer"
+  ;
+  grid-template-rows: 70px calc(100vh - 140px) 70px;
+}
