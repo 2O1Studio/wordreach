@@ -105,27 +105,38 @@ const Challenge = () => {
 
   const handleDragEnd = (event) => {
     console.log(event);
-    console.log(playableLetters);
-    console.log();
-
     const thisLetter = playableLetters.find((p) => p.id === event.active.id);
-    const isOnSameSquare =
-      thisLetter?.played?.row === event?.over?.data?.current?.row &&
-      thisLetter?.played?.column === event?.over?.data?.current?.column;
 
-    if (
-      isOnSameSquare &&
-      event.delta &&
-      event.delta.x < 70 &&
-      event.delta.y < 70 &&
-      event.delta.x > -70 &&
-      event.delta.y > -70
-    ) {
-      if (event.active.id === activeTile) {
-        return setActiveTile(null);
+    const foundRow = event?.collisions?.find(
+      (c) => c?.data?.droppableContainer?.data?.current?.row
+    );
+
+    if (foundRow) {
+      const foundColumn = event?.collisions?.find(
+        (c) => !!c?.data?.droppableContainer?.data?.current?.column
+      );
+      const isOnSameSquare =
+        thisLetter?.played?.row ===
+          foundRow.data.droppableContainer.data.current.row &&
+        thisLetter?.played?.column ===
+          foundColumn.data.droppableContainer.data.current.column;
+
+      console.log(isOnSameSquare);
+
+      if (
+        isOnSameSquare &&
+        event.delta &&
+        event.delta.x < 70 &&
+        event.delta.y < 70 &&
+        event.delta.x > -70 &&
+        event.delta.y > -70
+      ) {
+        if (event.active.id === activeTile) {
+          return setActiveTile(null);
+        }
+        logEvent("tap");
+        return setActiveTile(event.active.id);
       }
-      logEvent("tap");
-      return setActiveTile(event.active.id);
     }
     setPlayableLetters((oldSet) => {
       let pieceToUpdate;

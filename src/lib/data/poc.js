@@ -1,7 +1,4 @@
-import {
-  getLetterSet,
-  getRandomWeightedLetter,
-} from "../getRandomWeightedLetter";
+import { getLetterSet } from "../getRandomWeightedLetter";
 
 const letterSets = {
   1: [
