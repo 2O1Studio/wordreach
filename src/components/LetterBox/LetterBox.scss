@@ -62,10 +62,11 @@ $borderColor: rgba(0, 0, 0, 0.2);
 .letterBoxActiveLetter {
   display: none;
 }
-
-.letterBoxWithHover:hover {
-  background-color: rgba(0, 0, 0, 0.4);
-  .letterBoxActiveLetter {
-    display: block;
+@media (point: fine) {
+  .letterBoxWithHover:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+    .letterBoxActiveLetter {
+      display: block;
+    }
   }
 }

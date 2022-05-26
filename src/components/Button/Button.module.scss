@@ -30,8 +30,10 @@
   justify-content: center;
   cursor: pointer;
   margin-bottom: 15px;
-  &:hover {
-    background-color: $green400;
+  @media (point: fine) {
+    &:hover {
+      background-color: $green400;
+    }
   }
   &[disabled] {
     pointer-events: none;
