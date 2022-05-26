@@ -87,3 +87,8 @@ fieldset {
   padding-top: calc(60px + 15px);
   padding-bottom: 70px;
 }
+
+
+html,body {
+  overscroll-behavior-y: contain;
+}
