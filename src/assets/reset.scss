@@ -81,11 +81,10 @@ fieldset {
 
 .app {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   overflow: hidden;
   display: grid;
   padding-top: calc(60px + 15px);
-  padding-bottom: 70px;
 }
 
 
