@@ -24,9 +24,16 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-
+  
+      - name: Cache dependencies
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: ./node_modules
+          key: npm-${{ hashFiles('package-lock.json') }}
 
       - name: Install
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
 
       - name: Build
