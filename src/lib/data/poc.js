@@ -189,7 +189,6 @@ const letterSets = {
 };
 
 export const getInitialLetters = (setNumber) => {
-  console.log(setNumber);
   if (setNumber === "daily") {
     return getLetterSet(new Date().toLocaleDateString()).map(
       (letter, index) => ({
