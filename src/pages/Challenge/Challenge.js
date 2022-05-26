@@ -104,15 +104,17 @@ const Challenge = () => {
   const handleDragStart = (event) => {};
 
   const handleDragEnd = (event) => {
-    console.log(event);
     const thisLetter = playableLetters.find((p) => p.id === event.active.id);
 
     const foundRow = event?.collisions?.find(
-      (c) => c?.data?.droppableContainer?.data?.current?.row
+      (c) =>
+        typeof c?.data?.droppableContainer?.data?.current?.row !== "undefined"
     );
 
     const foundColumn = event?.collisions?.find(
-      (c) => !!c?.data?.droppableContainer?.data?.current?.column
+      (c) =>
+        typeof c?.data?.droppableContainer?.data?.current?.column !==
+        "undefined"
     );
     const isOnSameSquare =
       (foundRow &&
@@ -122,8 +124,6 @@ const Challenge = () => {
           foundColumn.data.droppableContainer.data.current.column) ||
       (thisLetter?.played?.row === event?.over?.data?.current?.row &&
         thisLetter?.played?.column === event?.over?.data?.current?.column);
-
-    console.log(isOnSameSquare);
 
     if (
       isOnSameSquare &&
