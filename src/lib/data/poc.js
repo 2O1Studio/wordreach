@@ -1,3 +1,8 @@
+import {
+  getLetterSet,
+  getRandomWeightedLetter,
+} from "../getRandomWeightedLetter";
+
 const letterSets = {
   1: [
     "A",
@@ -184,6 +189,16 @@ const letterSets = {
 };
 
 export const getInitialLetters = (setNumber) => {
+  console.log(setNumber);
+  if (setNumber === "daily") {
+    return getLetterSet(new Date().toLocaleDateString()).map(
+      (letter, index) => ({
+        id: `${letter}-${index}`,
+        letter: letter,
+        played: false,
+      })
+    );
+  }
   return letterSets[setNumber].map((letter, index) => ({
     id: `${letter}-${index}`,
     letter: letter,

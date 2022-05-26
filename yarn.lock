@@ -3696,6 +3696,11 @@
     "defined" "^1.0.0"
     "minimist" "^1.1.1"
 
+"deterministic-random-sequence@^1.0.5":
+  "integrity" "sha512-hfDzkTEfp1ts75tdR0nYlDXe0Yf7mPlE8q8fqoFrN1WPSjW+OkKuBIQTEyDPYhUKmFkbMqRM2581gpcyYXjiCA=="
+  "resolved" "https://registry.npmjs.org/deterministic-random-sequence/-/deterministic-random-sequence-1.0.5.tgz"
+  "version" "1.0.5"
+
 "didyoumean@^1.2.2":
   "integrity" "sha512-gxtyfqMg7GKyhQmb056K7M3xszy/myH8w+B4RT+QXBQsvAOdc3XymqDDPHx1BgPgsdAA5SIifona89YtRATDzw=="
   "resolved" "https://registry.npmjs.org/didyoumean/-/didyoumean-1.2.2.tgz"

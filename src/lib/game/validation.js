@@ -344,9 +344,11 @@ export const checkPlayedWordIsValidOnBoard = async (board, playableLetters) => {
 };
 
 export const getSavedGameState = (key) => {
+  key = key === "daily" ? new Date().toLocaleDateString() : key;
   return window.localStorage.getItem(`gameSaves${key}`) ?? null;
 };
 
 export const updateSavedGameState = (key, gameState) => {
+  key = key === "daily" ? new Date().toLocaleDateString() : key;
   window.localStorage.setItem(`gameSaves${key}`, JSON.stringify(gameState));
 };

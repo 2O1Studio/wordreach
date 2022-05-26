@@ -3,14 +3,21 @@ import { Button } from "../../components/Button/Button";
 import { InstructionModal } from "../../components/InstructionModal/InstructionModal";
 
 const Home = () => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(
+    window.localStorage.getItem(`seenHowToPlay`) !== "true"
+  );
+
+  const handleClose = () => {
+    window.localStorage.setItem(`seenHowToPlay`, "true");
+    setIsOpen((o) => !o);
+  };
 
   return (
     <>
-      <InstructionModal
-        isOpen={isOpen}
-        handleClose={() => setIsOpen((o) => !o)}
-      />
+      <InstructionModal isOpen={isOpen} handleClose={handleClose} />
+      <Button center to="/challenge/daily">
+        Daily Challenge
+      </Button>
       <Button center to="/challenge/1">
         Letter set 1
       </Button>

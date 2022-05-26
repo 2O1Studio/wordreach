@@ -380,7 +380,13 @@ const Challenge = () => {
 
           <button
             onClick={() => {
-              window.localStorage.removeItem(`gameSaves${letterSet}`);
+              window.localStorage.removeItem(
+                `gameSaves${
+                  letterSet === "daily"
+                    ? letterSet
+                    : new Date().toLocaleDateString()
+                }`
+              );
               setIsLoading(false);
               setBoard(initialBoardState);
               setPlayableLetters(getInitialLetters(letterSet));
