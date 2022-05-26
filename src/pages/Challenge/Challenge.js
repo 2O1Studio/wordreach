@@ -104,7 +104,17 @@ const Challenge = () => {
   const handleDragStart = (event) => {};
 
   const handleDragEnd = (event) => {
+    console.log(event);
+    console.log(playableLetters);
+    console.log();
+
+    const thisLetter = playableLetters.find((p) => p.id === event.active.id);
+    const isOnSameSquare =
+      thisLetter?.played?.row === event?.over?.data?.current?.row &&
+      thisLetter?.played?.column === event?.over?.data?.current?.column;
+
     if (
+      isOnSameSquare &&
       event.delta &&
       event.delta.x < 70 &&
       event.delta.y < 70 &&
